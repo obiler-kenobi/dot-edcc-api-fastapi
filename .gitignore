@@ -3,6 +3,7 @@ venv
 __pycache__
 postgres-data
 docker/db/data
+.vscode
 
 *.log
 *.log.*
