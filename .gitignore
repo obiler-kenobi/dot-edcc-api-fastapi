@@ -1,0 +1,14 @@
+.idea
+venv
+__pycache__
+postgres-data
+docker/db/data
+
+*.log
+*.log.*
+*.pyc
+.tox
+.coverage
+coverage.xml
+htmlcov
+.mypy_cache
