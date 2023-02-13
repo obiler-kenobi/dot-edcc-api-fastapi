@@ -2,7 +2,7 @@ from app.quality_procedure import models
 
 from sqlalchemy.orm import Session
 
-from app.quality_procedure.schemas import QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate
+from app.quality_procedure.schemas import QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, InterfacingUnitCreate, IUReviewSummaryCreate
 
 class QualityProcedureDocumentRequestManager(object): 
     @staticmethod
@@ -28,3 +28,40 @@ class QualityProcedureDocumentRequestManager(object):
         db.add(new_qp_request_history)
         db.commit()
         return new_qp_request_history
+    
+class DRRRFManager(object):
+    @staticmethod
+    def get_all_drrrfs(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.DRRRF).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_drrrf(db: Session, drrrf: DRRRFCreate):
+        new_drrrf = models.DRRRF(**drrrf.dict())
+
+        db.add(new_drrrf)
+        db.commit()
+        return new_drrrf
+    
+    @staticmethod
+    def get_all_interfacing_units(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.InterfacingUnit).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_interfacing_unit(db: Session , interfacing_unit: InterfacingUnitCreate):
+        new_interfacing_unit = models.InterfacingUnit(**interfacing_unit.dict())
+
+        db.add(new_interfacing_unit)
+        db.commit()
+        return new_interfacing_unit
+
+    @staticmethod
+    def get_all_iu_review_summary(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.IUReviewSummary).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_iu_review_summary(db: Session, iu_review_summary: IUReviewSummaryCreate):
+        new_iu_review_summary = models.IUReviewSummary(**iu_review_summary.dict())
+
+        db.add(new_iu_review_summary)
+        db.commit()
+        return new_iu_review_summary

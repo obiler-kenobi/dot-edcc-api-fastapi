@@ -3,8 +3,9 @@ from fastapi import APIRouter, Depends, status
 
 from sqlalchemy.orm import Session
 
-from app.quality_procedure.schemas import QualityProcedureDocumentRequest, QualityProcedureDocumentRequestCreate, QPRequestHistory, QPRequestHistoryCreate
-from app.quality_procedure.services import QualityProcedureDocumentRequestManager
+from app.quality_procedure.schemas import (QualityProcedureDocumentRequest, QualityProcedureDocumentRequestCreate, QPRequestHistory, QPRequestHistoryCreate) #QP REQUESTS
+from app.quality_procedure.schemas import DRRRF, DRRRFCreate, InterfacingUnit, InterfacingUnitCreate, IUReviewSummary, IUReviewSummaryCreate
+from app.quality_procedure.services import QualityProcedureDocumentRequestManager, DRRRFManager
 from app.deps import get_db
 
 quality_procedure_router = APIRouter()
@@ -44,3 +45,57 @@ def get_all_qp_request_history(db: Session = Depends(get_db)):
 )
 def create_qp_request_history(qp_request_history: QPRequestHistoryCreate, db: Session = Depends(get_db)):
     return QualityProcedureDocumentRequestManager.create_qp_request_history(db, qp_request_history)
+
+#GET ALL DRRRF
+@quality_procedure_router.get(
+    "/drrrfs",
+    response_model=List[DRRRF],
+    status_code=status.HTTP_200_OK
+)
+def get_all_drrrfs(db: Session = Depends(get_db)):
+    return DRRRFManager.get_all_drrrfs(db)
+
+#CREATE DRRRF
+@quality_procedure_router.post(
+    "/drrrfs",
+    response_model=DRRRF,
+    status_code=status.HTTP_201_CREATED
+)
+def create_drrrf(drrrf: DRRRFCreate, db: Session = Depends(get_db)):
+    return DRRRFManager.create_drrrf(db, drrrf)
+
+#GET ALL INTERFACING UNIT
+@quality_procedure_router.get(
+    "/interfacing-units",
+    response_model=List[InterfacingUnit],
+    status_code=status.HTTP_200_OK
+)
+def get_all_interfacing_units(db: Session = Depends(get_db)):
+    return DRRRFManager.get_all_interfacing_units(db)
+
+#CREATE INTERFACING UNIT
+@quality_procedure_router.post(
+    "/interfacing-units",
+    response_model=InterfacingUnit,
+    status_code=status.HTTP_201_CREATED
+)
+def create_interfacing_unit(interfacing_unit: InterfacingUnitCreate, db: Session = Depends(get_db)):
+    return DRRRFManager.create_interfacing_unit(db, interfacing_unit)
+
+#GET ALL IU REVIEW SUMMARY
+@quality_procedure_router.get(
+    "/iu-review-summary",
+    response_model=List[IUReviewSummary],
+    status_code=status.HTTP_200_OK
+)
+def get_all_iu_review_summary(db: Session = Depends(get_db)):
+    return DRRRFManager.get_all_iu_review_summary(db)
+
+#CREATE IU REVIEW SUMMARY
+@quality_procedure_router.post(
+    "/iu-review-summary",
+    response_model=IUReviewSummary,
+    status_code=status.HTTP_201_CREATED
+)
+def create_iu_review_summary(iu_review_summary: IUReviewSummaryCreate, db: Session = Depends(get_db)):
+    return DRRRFManager.create_iu_review_summary(db, iu_review_summary)
