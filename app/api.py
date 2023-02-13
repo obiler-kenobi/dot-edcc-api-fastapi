@@ -7,6 +7,7 @@ from app.designation.views import designation_router
 from app.user.views import user_router
 from app.role_and_permission.views import role_and_permission_router
 from app.quality_procedure.views import quality_procedure_router
+from app.qms_team.views import qms_team_router
 
 api_router = APIRouter(default_response_class=ORJSONResponse)
 
@@ -47,5 +48,13 @@ api_router.include_router(
     quality_procedure_router,
     prefix="",
     tags=['quality-procedures'],
+    responses={401: {"model": ErrorModel}, 403: {"model": ErrorModel}}
+)
+
+#QMS TEAM
+api_router.include_router(
+    qms_team_router,
+    prefix="",
+    tags=["qms-team"],
     responses={401: {"model": ErrorModel}, 403: {"model": ErrorModel}}
 )

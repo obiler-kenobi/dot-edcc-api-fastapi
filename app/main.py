@@ -10,6 +10,7 @@ from app.designation import models as designation_models
 from app.user import models as user_models
 from app.role_and_permission import models as role_and_permission_models
 from app.quality_procedure import models as quality_procedure_models
+from app.qms_team import models as qms_team_models
 
 app = FastAPI()
 
@@ -18,6 +19,7 @@ designation_models.Base.metadata.create_all(bind=engine)
 user_models.Base.metadata.create_all(bind=engine)
 role_and_permission_models.Base.metadata.create_all(bind=engine)
 quality_procedure_models.Base.metadata.create_all(bind=engine)
+qms_team_models.Base.metadata.create_all(bind=engine)
 
 
 app.add_middleware(
