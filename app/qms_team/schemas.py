@@ -18,7 +18,6 @@ class ISOFacilitator(ISOFacilitatorBase):
 
 #Deputy ISO Facilitator
 class DISOFacilitatorBase(BaseModel):
-    office_handled: int
     active: bool = True
     date_encoded: datetime
 

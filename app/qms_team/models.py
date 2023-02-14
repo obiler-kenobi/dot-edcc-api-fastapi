@@ -15,7 +15,6 @@ class DISOFacilitator(Base):
     __tablename__ = "diso_facilitator" #Deputy ISO Facilitator
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    office_handled = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
     active = Column(Boolean, nullable=False)
     date_encoded = Column(TIMESTAMP, nullable=False)
@@ -26,5 +25,15 @@ class HeadOfOffice(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     office_handled = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
+    active = Column(Boolean, nullable=False)
+    date_encoded = Column(TIMESTAMP, nullable=False)  
+
+class DocumentControlCenter(Base):
+    __tablename__ = "document_control_center"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False)
+    name_tag = Column(String(10), nullable=False)
+    designation = Column(String(20), nullable=False)
     active = Column(Boolean, nullable=False)
     date_encoded = Column(TIMESTAMP, nullable=False)
