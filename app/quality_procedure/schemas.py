@@ -87,3 +87,33 @@ class IUReviewSummary(IUReviewSummaryBase):
 
     class Config:
         orm_mode = True
+
+#Quality Procedure
+#Title Page
+class TitlePageBase(BaseModel):
+    revision_type: str
+    description_of_change: str
+    page_affected: str
+    date_created: datetime
+
+class TitlePageCreate(TitlePageBase):
+    drrrf_id: int
+
+class TitlePage(TitlePageBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class ObjectiveBase(BaseModel):
+    objective: str
+    date_created: datetime
+
+class ObjectiveCreate(ObjectiveBase):
+    drrrf_id: int
+
+class Objective(ObjectiveBase):
+    id: int
+
+    class Config:
+        orm_mode = True

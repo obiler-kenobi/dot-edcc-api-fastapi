@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, Boolean, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import TIMESTAMP, Boolean, Column, ForeignKey, Integer, String, DateTime, Text
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -152,4 +152,130 @@ class QPStatus(Base):
     action_id = Column(Integer, nullable=False)
     status_date = Column(TIMESTAMP, nullable=False)
 
+#QUALITY PROCEDURES
+class TitlePage(Base):
+    __tablename__ = "title_page"
 
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    revision_type = Column(String(15), nullable=False)
+    description_of_change = Column(String(200), nullable=False)
+    page_affected = Column(String(10), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPObjective(Base):
+    __tablename__ = "qp_objective"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    objective = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPScope(Base):
+    __tablename__ = "qp_scope"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    scope = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPDefinitionOfTerms(Base):
+    __tablename__ = "qp_definition_of_terms"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    term = Column(String(80), nullable=False)
+    definition = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPReferenceDocuments(Base):
+    __tablename__ = "qp_reference_documents"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    reference_document = Column(Text, nullable=False)
+    file_path = Column(String(150), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPResponsbilityAndAuthority(Base):
+    __tablename__ = "qp_responsibility_and_authority"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    authority = Column(String, nullable=False)
+    responsibility = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPProcedures(Base):
+    __tablename__ = "qp_procedures"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    procedure = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPProcesses(Base):
+    __tablename__ = "qp_processes"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    procedure_id = Column(Integer, nullable=False)
+    process_title = Column(String(100), nullable=False)
+    process_description = Column(Text, nullable=False) #WYSIWYG
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPProcessInCharge(Base):
+    __tablename__ = "qp_process_in_charge"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    process_id = Column(Integer, nullable=False)
+    in_charge_id = Column(Integer, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPProcessesNotes(Base): 
+    __tablename__ = "qp_process_notes"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    process_id = Column(Integer, nullable=False)
+    note = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPProcessRecords(Base):
+    __tablename__ = "qp_process_records"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    process_id = Column(Integer, nullable=False)
+    record = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPReports(Base):
+    __tablename__ = "qp_reports"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    report = Column(String(100), nullable=False)
+    frequency = Column(String(150), nullable=False)
+    in_charge = Column(String(70), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPPerformanceIndicators(Base):
+    __tablename__ = "qp_performance_indicators"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    in_charge = Column(String(100), nullable=False)
+    indicator = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+class QPAttachmentAndForms(Base):
+    __tablename__ = "qp_attachments_and_forms"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, nullable=False)
+    record = Column(String(100), nullable=False)
+    control_number = Column(String(100), nullable=False)
+    maintenance = Column(Integer, nullable=False)
+    preservation = Column(Integer, nullable=False)
+    remarks = Column(String(50), nullable=False)
+
+    record_path = Column(String(100), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)

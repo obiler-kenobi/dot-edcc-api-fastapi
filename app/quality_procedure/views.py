@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from app.quality_procedure.schemas import (QualityProcedureDocumentRequest, QualityProcedureDocumentRequestCreate, QPRequestHistory, QPRequestHistoryCreate) #QP REQUESTS
 from app.quality_procedure.schemas import DRRRF, DRRRFCreate, InterfacingUnit, InterfacingUnitCreate, IUReviewSummary, IUReviewSummaryCreate
 from app.quality_procedure.services import QualityProcedureDocumentRequestManager, DRRRFManager
+from app.quality_procedure.schemas import TitlePage, TitlePageCreate
+from app.quality_procedure.services import QualityProcedureManager
 from app.deps import get_db
 
 quality_procedure_router = APIRouter()
@@ -99,3 +101,22 @@ def get_all_iu_review_summary(db: Session = Depends(get_db)):
 )
 def create_iu_review_summary(iu_review_summary: IUReviewSummaryCreate, db: Session = Depends(get_db)):
     return DRRRFManager.create_iu_review_summary(db, iu_review_summary)
+
+#QUALITY PROCEDURE
+#GET ALL TITLE PAGE
+@quality_procedure_router.get(
+    "/quality-procedures/title-pages",
+    response_model=List[TitlePage],
+    status_code=status.HTTP_200_OK
+)
+def get_all_title_page(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_title_page(db)
+
+#CREATE IU REVIEW SUMMARY
+@quality_procedure_router.post(
+    "/quality-procedures/title-pages",
+    response_model=TitlePage,
+    status_code=status.HTTP_201_CREATED
+)
+def create_title_page(title_page: TitlePageCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_title_page(db, title_page)

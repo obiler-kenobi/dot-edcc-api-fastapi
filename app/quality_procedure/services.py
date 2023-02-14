@@ -3,6 +3,7 @@ from app.quality_procedure import models
 from sqlalchemy.orm import Session
 
 from app.quality_procedure.schemas import QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, InterfacingUnitCreate, IUReviewSummaryCreate
+from app.quality_procedure.schemas import TitlePageCreate
 
 class QualityProcedureDocumentRequestManager(object): 
     @staticmethod
@@ -65,3 +66,15 @@ class DRRRFManager(object):
         db.add(new_iu_review_summary)
         db.commit()
         return new_iu_review_summary
+
+class QualityProcedureManager(object):
+    def get_all_title_page(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.TitlePage).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_title_page(db: Session, title_page: TitlePageCreate):
+        new_title_page = models.TitlePage(**title_page.dict())
+
+        db.add(new_title_page)
+        db.commit()
+        return new_title_page
