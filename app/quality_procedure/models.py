@@ -37,7 +37,7 @@ class DRRRF(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     process_owner_id = Column(Integer, nullable=False)
-    #current_process_owner_id = Column(Integer, nullable=False)
+    current_process_owner_id = Column(Integer, nullable=False)
     received_date = Column(TIMESTAMP, nullable=False)
     execution_date = Column(DateTime, nullable=True)
     document_number = Column(String(100), nullable=True)
@@ -48,12 +48,12 @@ class DRRRF(Base):
     purpose = Column(String(150), nullable=False)
     iso_remarks = Column(String(100), nullable=True)
     dcc_remarks = Column(String(100), nullable=True)
-
-    #registration_mark = Column(Text, nullable=True)
-    #registration_date = Column(DateTime, nullable=True)
-    #distribution_mark = Column(Text, nullable=True)
-    #distribution_date = Column(Text, nullable=True)
-    #date_created = Column(TIMESTAMP, nullable=False)
+    slug = Column(String(100), nullable=False)
+    registration_mark = Column(Text, nullable=True)
+    registration_date = Column(DateTime, nullable=True)
+    distribution_mark = Column(Text, nullable=True)
+    distribution_date = Column(Text, nullable=True)
+    date_created = Column(TIMESTAMP, nullable=False)
 
 class InterfacingUnit(Base):
     __tablename__ = "intefacing_unit" #Interfacing Units to Review the Quality Procedure
@@ -61,8 +61,8 @@ class InterfacingUnit(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
-    #signed = Column(Boolean, nullable=False) 
-    #signed_date = Column(DateTime, nullable=False)
+    signed = Column(Boolean, nullable=False) 
+    signed_date = Column(DateTime, nullable=False)
     nominated_date = Column(TIMESTAMP, nullable=False)
    
 class IUReviewSummary(Base):
@@ -153,8 +153,8 @@ class QPStatus(Base):
     status_date = Column(TIMESTAMP, nullable=False)
 
 #QUALITY PROCEDURES
-class TitlePage(Base):
-    __tablename__ = "title_page"
+class QPTitlePage(Base):
+    __tablename__ = "qp_title_page"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
@@ -179,8 +179,8 @@ class QPScope(Base):
     scope = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPDefinitionOfTerms(Base):
-    __tablename__ = "qp_definition_of_terms"
+class QPDefinitionOfTerm(Base):
+    __tablename__ = "qp_definition_of_term"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
@@ -188,8 +188,8 @@ class QPDefinitionOfTerms(Base):
     definition = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPReferenceDocuments(Base):
-    __tablename__ = "qp_reference_documents"
+class QPReferenceDocument(Base):
+    __tablename__ = "qp_reference_document"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
@@ -206,19 +206,20 @@ class QPResponsbilityAndAuthority(Base):
     responsibility = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPProcedures(Base):
-    __tablename__ = "qp_procedures"
+class QPProcedure(Base):
+    __tablename__ = "qp_procedure"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
     procedure = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPProcesses(Base):
-    __tablename__ = "qp_processes"
+class QPProcess(Base):
+    __tablename__ = "qp_process" 
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     procedure_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, nullable=False)
     process_title = Column(String(100), nullable=False)
     process_description = Column(Text, nullable=False) #WYSIWYG
     date_created = Column(TIMESTAMP, nullable=False)
@@ -228,27 +229,30 @@ class QPProcessInCharge(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     process_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, nullable=False) 
     in_charge_id = Column(Integer, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPProcessesNotes(Base): 
-    __tablename__ = "qp_process_notes"
+class QPProcessNote(Base):
+    __tablename__ = "qp_process_note"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     process_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, nullable=False)
     note = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPProcessRecords(Base):
-    __tablename__ = "qp_process_records"
+class QPProcessRecord(Base):
+    __tablename__ = "qp_process_record"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     process_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, nullable=False)
     record = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPReports(Base):
-    __tablename__ = "qp_reports"
+class QPReport(Base):
+    __tablename__ = "qp_report"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
@@ -257,8 +261,8 @@ class QPReports(Base):
     in_charge = Column(String(70), nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPPerformanceIndicators(Base):
-    __tablename__ = "qp_performance_indicators"
+class QPPerformanceIndicator(Base):
+    __tablename__ = "qp_performance_indicator"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
@@ -266,8 +270,8 @@ class QPPerformanceIndicators(Base):
     indicator = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
-class QPAttachmentAndForms(Base):
-    __tablename__ = "qp_attachments_and_forms"
+class QPAttachmentAndForm(Base):
+    __tablename__ = "qp_attachments_and_form"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
@@ -276,6 +280,5 @@ class QPAttachmentAndForms(Base):
     maintenance = Column(Integer, nullable=False)
     preservation = Column(Integer, nullable=False)
     remarks = Column(String(50), nullable=False)
-
-    record_path = Column(String(100), nullable=False)
+    file_path = Column(String(100), nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)

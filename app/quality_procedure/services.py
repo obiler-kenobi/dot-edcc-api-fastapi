@@ -3,7 +3,7 @@ from app.quality_procedure import models
 from sqlalchemy.orm import Session
 
 from app.quality_procedure.schemas import QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, InterfacingUnitCreate, IUReviewSummaryCreate
-from app.quality_procedure.schemas import TitlePageCreate
+from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPScopeCreate, QPDefinitionOfTermCreate, QPReferenceDocumentCreate, QPResponsiblityAndAuthorityCreate, QPProcedureCreate, QPProcessCreate, QPProcessInChargeCreate, QPProcessNoteCreate, QPProcessRecordCreate, QPReportCreate, QPPerformanceIndicatorCreate, QPAttachmentAndFormCreate
 
 class QualityProcedureDocumentRequestManager(object): 
     @staticmethod
@@ -68,13 +68,182 @@ class DRRRFManager(object):
         return new_iu_review_summary
 
 class QualityProcedureManager(object):
+    @staticmethod
     def get_all_title_page(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.TitlePage).offset(skip).limit(limit).all()
+        return db.query(models.QPTitlePage).offset(skip).limit(limit).all()
     
     @staticmethod
-    def create_title_page(db: Session, title_page: TitlePageCreate):
-        new_title_page = models.TitlePage(**title_page.dict())
+    def create_title_page(db: Session, title_page: QPTitlePageCreate):
+        new_title_page = models.QPTitlePage(**title_page.dict())
 
         db.add(new_title_page)
         db.commit()
         return new_title_page
+    
+    @staticmethod
+    def get_all_objectives(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPObjective).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_objective(db: Session, objective: QPObjectiveCreate):
+        new_objective = models.QPObjective(**objective.dict())
+
+        db.add(new_objective)
+        db.commit()
+        return new_objective
+    
+    @staticmethod
+    def get_all_scopes(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPScope).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_scope(db: Session, scope: QPScopeCreate):
+        new_scope = models.QPScope(**scope.dict())
+
+        db.add(new_scope)
+        db.commit()
+        return new_scope
+    
+    @staticmethod
+    def get_all_definition_of_term(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPDefinitionOfTerm).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_definition_of_term(db: Session, definition_of_term: QPDefinitionOfTermCreate):
+        new_definition_of_term = models.QPDefinitionOfTerm(**definition_of_term.dict())
+
+        db.add(new_definition_of_term)
+        db.commit()
+        return new_definition_of_term
+    
+    @staticmethod
+    def get_all_reference_document(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPReferenceDocument).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_reference_document(db: Session, reference_document: QPReferenceDocumentCreate):
+        new_reference_document = models.QPReferenceDocument(**reference_document.dict())
+
+        db.add(new_reference_document)
+        db.commit()
+        return new_reference_document
+    
+    @staticmethod
+    def get_all_responsibility_and_authority(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPResponsbilityAndAuthority).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_responsibility_and_authority(db: Session, responsibility_and_authority: QPResponsiblityAndAuthorityCreate):
+        new_responsibility_and_authority = models.QPResponsbilityAndAuthority(**responsibility_and_authority.dict())
+
+        db.add(new_responsibility_and_authority)
+        db.commit()
+        return new_responsibility_and_authority
+    
+    @staticmethod
+    def get_all_procedure(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPProcedure).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_procedure(db: Session, procedure: QPProcedureCreate):
+        new_procedure = models.QPProcedure(**procedure.dict())
+
+        db.add(new_procedure)
+        db.commit()
+        return new_procedure
+    
+    @staticmethod
+    def get_all_process(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPProcess).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_process(db: Session, process: QPProcessCreate):
+        new_process = models.QPProcess(**process.dict())
+
+        db.add(new_process)
+        db.commit()
+        return new_process
+
+    @staticmethod
+    def get_all_process_in_charge(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPProcessInCharge).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_process_in_charge(db: Session, process_in_charge: QPProcessInChargeCreate):
+        new_process_in_charge = models.QPProcessInCharge(**process_in_charge.dict())
+
+        db.add(new_process_in_charge)
+        db.commit()
+        return new_process_in_charge
+    
+    @staticmethod
+    def get_all_process_note(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPProcessNote).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_process_note(db: Session, process_note: QPProcessNoteCreate):
+        new_process_note = models.QPProcessNote(**process_note.dict())
+
+        db.add(new_process_note)
+        db.commit()
+        return new_process_note
+
+    @staticmethod
+    def get_all_process_record(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPProcessRecord).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_process_record(db: Session, process_record: QPProcessRecordCreate):
+        new_process_record = models.QPProcessRecord(**process_record.dict())
+
+        db.add(new_process_record)
+        db.commit()
+        return new_process_record
+    
+    @staticmethod
+    def get_all_process_record(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPProcessRecord).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_process_record(db: Session, process_record: QPProcessRecordCreate):
+        new_process_record = models.QPProcessRecord(**process_record.dict())
+
+        db.add(new_process_record)
+        db.commit()
+        return new_process_record
+    
+    @staticmethod
+    def get_all_report(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPReport).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_report(db: Session, report: QPReportCreate):
+        new_report = models.QPReport(**report.dict())
+
+        db.add(new_report)
+        db.commit()
+        return new_report
+    
+    @staticmethod
+    def get_all_performance_indicator(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPPerformanceIndicator).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_performance_indicator(db: Session, performance_indicator: QPPerformanceIndicatorCreate):
+        new_performance_indicator = models.QPPerformanceIndicator(**performance_indicator.dict())
+
+        db.add(new_performance_indicator)
+        db.commit()
+        return new_performance_indicator
+    
+    @staticmethod
+    def get_all_attachment_and_form(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPAttachmentAndForm).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_attachment_and_form(db: Session, attachment_and_form: QPAttachmentAndFormCreate):
+        new_attachment_and_form = models.QPAttachmentAndForm(**attachment_and_form.dict())
+
+        db.add(new_attachment_and_form)
+        db.commit()
+        return new_attachment_and_form
