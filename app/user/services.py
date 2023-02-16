@@ -3,7 +3,7 @@ from app.auth.services import get_password_hash
 
 from sqlalchemy.orm import Session
 
-from app.user.schemas import UserBasicInformationCreate, UserOfficeInformationCreate, UsersCreate
+from app.user.schemas import UserBasicInformationCreate, UserOfficeInformationCreate, UserCreate
 
 class UserManager(object):
     @staticmethod
@@ -32,11 +32,11 @@ class UserManager(object):
 
     @staticmethod
     def get_all_users(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.Users).offset(skip).limit(limit).all()
+        return db.query(models.User).offset(skip).limit(limit).all()
 
     @staticmethod
-    def create_user(db: Session, user_account: UsersCreate):
-        new_user = models.Users(**user_account.dict())
+    def create_user(db: Session, user_account: UserCreate):
+        new_user = models.User(**user_account.dict())
 
         new_user.hashed_password = get_password_hash(new_user.hashed_password)
 

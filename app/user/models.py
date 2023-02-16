@@ -7,7 +7,7 @@ class UserBasicInformation(Base):
     __tablename__ = "user_basic_information"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("user.id"))
     first_name = Column(String(100), nullable=False)
     middle_initial = Column(String(5), nullable=True)
     last_name = Column(String(100), nullable=False)
@@ -18,10 +18,10 @@ class UserBasicInformation(Base):
     alternate_contact_number = Column(String(17), nullable=True)
     alternate_email_address = Column(String(70), nullable=True)
     designation = Column(Integer, nullable=False)
-    encoded_date = Column(TIMESTAMP, nullable=False)
-    encoded_by = Column(String(40), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+    created_by = Column(String(40), nullable=False)
 
-    users = relationship("Users", back_populates="user_basic_information")
+    user = relationship("User", back_populates="user_basic_information")
     user_office_information = relationship("UserOfficeInformation", back_populates="user_basic_information")
 
 class UserOfficeInformation(Base):
@@ -35,8 +35,8 @@ class UserOfficeInformation(Base):
     dot_office_id = Column(Integer, ForeignKey("dot_office.id"))
     dot_division_id = Column(Integer, ForeignKey("dot_division.id"))
     dot_unit_id = Column(Integer, ForeignKey("dot_unit.id"))
-    encoded_date = Column(TIMESTAMP, nullable=False)
-    encoded_by = Column(String(40), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+    created_by = Column(String(40), nullable=False)
 
     user_basic_information = relationship("UserBasicInformation", back_populates="user_office_information")
     dot_main_office = relationship("DOTMainOffice", back_populates="user_office_information")
@@ -46,18 +46,18 @@ class UserOfficeInformation(Base):
     dot_division = relationship("DOTDivision", back_populates="user_office_information")
     dot_unit = relationship("DOTUnit", back_populates="user_office_information")
 
-class Users(Base):
-    __tablename__ = "users"
+class User(Base):
+    __tablename__ = "user"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     username = Column(String(40), unique=True, nullable=False)
     hashed_password = Column(String(200), nullable=False)
     primary_email_address = Column(String(40), nullable=False)
-    role = Column(Integer, nullable=False)
+    role_id = Column(Integer, nullable=False)
     active = Column(Boolean, nullable=False)
-    encoded_date = Column(TIMESTAMP, nullable=False)
-    encoded_by = Column(String(40), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+    created_by = Column(String(40), nullable=False)
 
-    user_basic_information = relationship("UserBasicInformation", back_populates="users")
+    user_basic_information = relationship("UserBasicInformation", back_populates="user")
 
 

@@ -9,7 +9,7 @@ class QualityProcedureDocumentRequest(Base):
     __tablename__ = "quality_procedure_document_request" #Temporary table name
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, nullable=False) #May change to requested_by
     request_date = Column(TIMESTAMP, nullable=False)
     request_purpose = Column(String(150), nullable=False)
     request_type = Column(String(10), nullable=False)
@@ -26,7 +26,7 @@ class QPRequestHistory(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     request_id = Column(Integer, ForeignKey("quality_procedure_document_request.id"))
     user_id = Column(Integer, nullable=False)
-    comment = Column(String(150), nullable=False)
+    comment = Column(String(150), nullable=False) #might change to remarks
     comment_date = Column(TIMESTAMP, nullable=False) #Temporary Column Name
 
     quality_procedure_document_request = relationship("QualityProcedureDocumentRequest", back_populates="qp_request_history")
@@ -37,7 +37,7 @@ class DRRRF(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     process_owner_id = Column(Integer, nullable=False)
-    current_process_owner_id = Column(Integer, nullable=False)
+    current_process_owner_id = Column(Integer, nullable=False) #will need to find a way to automate but currently this is manual
     received_date = Column(TIMESTAMP, nullable=False)
     execution_date = Column(DateTime, nullable=True)
     document_number = Column(String(100), nullable=True)
@@ -52,7 +52,7 @@ class DRRRF(Base):
     registration_mark = Column(Text, nullable=True)
     registration_date = Column(DateTime, nullable=True)
     distribution_mark = Column(Text, nullable=True)
-    distribution_date = Column(Text, nullable=True)
+    distribution_date = Column(DateTime, nullable=True)
     date_created = Column(TIMESTAMP, nullable=False)
 
 class InterfacingUnit(Base):
@@ -71,10 +71,9 @@ class IUReviewSummary(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     interfacing_unit_id = Column(Integer, nullable=False)
     review_summary = Column(String(200), nullable=False)
-    signed = Column(Boolean, nullable=False)
     reviewed_date = Column(TIMESTAMP, nullable=False)
 
-class CurrentProcessOwner(Base):
+class CurrentProcessOwner(Base): #Might change to process owner 
     __tablename__ = "current_process_owner"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -82,7 +81,7 @@ class CurrentProcessOwner(Base):
     drrrf_id = Column(Integer, nullable=False)
     description = Column(String, nullable=False)
     active = Column(Boolean, nullable=False)
-    date_acted = Column(DateTime, nullable=False) #DATE ACTED AS CURRENT PROCESS OWNER
+    date_created  = Column(DateTime, nullable=False) #DATE ACTED AS CURRENT PROCESS OWNER
 
 class QPSignatories(Base):
     __tablename__ = "qp_signatories"
@@ -186,6 +185,7 @@ class QPDefinitionOfTerm(Base):
     drrrf_id = Column(Integer, nullable=False)
     term = Column(String(80), nullable=False)
     definition = Column(Text, nullable=False)
+    #slug
     date_created = Column(TIMESTAMP, nullable=False)
 
 class QPReferenceDocument(Base):
@@ -194,7 +194,7 @@ class QPReferenceDocument(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
     reference_document = Column(Text, nullable=False)
-    file_path = Column(String(150), nullable=False)
+    file_path = Column(String(150), nullable=True)
     date_created = Column(TIMESTAMP, nullable=False)
 
 class QPResponsbilityAndAuthority(Base):
@@ -204,6 +204,7 @@ class QPResponsbilityAndAuthority(Base):
     drrrf_id = Column(Integer, nullable=False)
     authority = Column(String, nullable=False)
     responsibility = Column(Text, nullable=False)
+    #slug
     date_created = Column(TIMESTAMP, nullable=False)
 
 class QPProcedure(Base):
@@ -212,6 +213,7 @@ class QPProcedure(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
     procedure = Column(Text, nullable=False)
+    #slug
     date_created = Column(TIMESTAMP, nullable=False)
 
 class QPProcess(Base):
@@ -222,6 +224,7 @@ class QPProcess(Base):
     drrrf_id = Column(Integer, nullable=False)
     process_title = Column(String(100), nullable=False)
     process_description = Column(Text, nullable=False) #WYSIWYG
+    #slug
     date_created = Column(TIMESTAMP, nullable=False)
 
 class QPProcessInCharge(Base):
@@ -258,7 +261,7 @@ class QPReport(Base):
     drrrf_id = Column(Integer, nullable=False)
     report = Column(String(100), nullable=False)
     frequency = Column(String(150), nullable=False)
-    in_charge = Column(String(70), nullable=False)
+    in_charge = Column(String(70), nullable=False) #change to id to relate with responsiblity and authority
     date_created = Column(TIMESTAMP, nullable=False)
 
 class QPPerformanceIndicator(Base):
@@ -276,9 +279,9 @@ class QPAttachmentAndForm(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, nullable=False)
     record = Column(String(100), nullable=False)
-    control_number = Column(String(100), nullable=False)
-    maintenance = Column(Integer, nullable=False)
-    preservation = Column(Integer, nullable=False)
-    remarks = Column(String(50), nullable=False)
-    file_path = Column(String(100), nullable=False)
+    control_number = Column(String(100), nullable=True)
+    maintenance = Column(Integer, nullable=True)
+    preservation = Column(Integer, nullable=True)
+    remarks = Column(String(50), nullable=True)
+    file_path = Column(String(100), nullable=True)
     date_created = Column(TIMESTAMP, nullable=False)

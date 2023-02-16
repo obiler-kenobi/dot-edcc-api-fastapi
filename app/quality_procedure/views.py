@@ -262,7 +262,7 @@ def get_all_process_note(db: Session = Depends(get_db)):
     response_model=QPProcessNote,
     status_code=status.HTTP_201_CREATED
 )
-def create_process_note(process_note: QPProcessCreate, db: Session = Depends(get_db)):
+def create_process_note(process_note: QPProcessNoteCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_process_note(db, process_note)
 
 #GET ALL PROCESS IN-CHARGE

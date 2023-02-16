@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 
 from sqlalchemy.orm import Session
 
-from app.user.schemas import UserBasicInformation, UserBasicInformationCreate, UserOfficeInformation, UserOfficeInformationCreate, Users, UsersCreate
+from app.user.schemas import UserBasicInformation, UserBasicInformationCreate, UserOfficeInformation, UserOfficeInformationCreate, User, UserCreate
 from app.user.services import UserManager
 from app.deps import get_db
 
@@ -48,7 +48,7 @@ def create_user_office_information(user_office_information: UserOfficeInformatio
 #GET ALL USER ACCOUNT
 @user_router.get(
     "",
-    response_model=List[Users],
+    response_model=List[User],
     status_code=status.HTTP_200_OK
 )
 def get_all_users_account(db: Session = Depends(get_db)):
@@ -57,8 +57,8 @@ def get_all_users_account(db: Session = Depends(get_db)):
 #CREATE NEW USER ACCOUNT
 @user_router.post(
     "",
-    response_model=Users,
+    response_model=User,
     status_code=status.HTTP_201_CREATED
 )
-def create_user_account(user_account: UsersCreate, db: Session = Depends(get_db)):
+def create_user_account(user_account: UserCreate, db: Session = Depends(get_db)):
     return UserManager.create_user(db, user_account)

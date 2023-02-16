@@ -10,8 +10,8 @@ class UserOfficeInformationBase(BaseModel):
     dot_sub_sector_id: int
     dot_office_id: int
     dot_division_id: int
-    encoded_date: datetime
-    encoded_by: str
+    date_created: datetime
+    created_by: str
 
 class UserOfficeInformationCreate(UserOfficeInformationBase):
     dot_unit_id: int
@@ -45,8 +45,8 @@ class UserBasicInformationBase(BaseModel):
     alternate_contact_number: str
     alternate_email_address: str
     designation: int
-    encoded_date: datetime
-    encoded_by: str
+    date_created: datetime
+    created_by: str
 
 class UserBasicInformationCreate(UserBasicInformationBase):
     user_id: int
@@ -58,19 +58,18 @@ class UserBasicInformation(UserBasicInformationBase):
     class Config:
         orm_mode = True
 
-class UsersBase(BaseModel):
+class UserBase(BaseModel):
     username: str
     hashed_password: str = "DOTedcc@2022"
     primary_email_address: str
-    role: int
     active: bool = True
-    encoded_date: datetime
-    encoded_by: str
+    date_created: datetime
+    created_by: str
 
-class UsersCreate(UsersBase):
-    pass
+class UserCreate(UserBase):
+    role_id: int
 
-class Users(UsersBase):
+class User(UserBase):
     id: int
     user_basic_information: List[UserBasicInformation] = []
 

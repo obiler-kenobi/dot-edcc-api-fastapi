@@ -8,7 +8,7 @@ class Role(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     role = Column(String(70), nullable=False)
-    role_description = Column(String(100), nullable=False)
+    role_description = Column(String(200), nullable=False)
     tag = Column(String(80), nullable=False)
     slug = Column(String(80), nullable=False)
     fixed = Column(Boolean, nullable=False)

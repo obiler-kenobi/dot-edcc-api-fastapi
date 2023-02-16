@@ -84,7 +84,6 @@ class InterfacingUnit(InterfacingUnitBase):
 #INTERFACING UNITS REVIEW SUMMARY
 class IUReviewSummaryBase(BaseModel): #IU = Interfacing Unit
     review_summary: str
-    signed: bool = False
     reviewed_date: datetime
 
 class IUReviewSummaryCreate(IUReviewSummaryBase):
