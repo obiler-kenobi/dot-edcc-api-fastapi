@@ -39,20 +39,20 @@ class QualityProcedureDocumentRequest(QualityProcedureDocumentRequestBase):
 #DRRRF
 class DRRRFBase(BaseModel):
     received_date: datetime
-    execution_date: datetime = "0001-01-01T00:00:00.00Z"
+    #execution_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
     document_number: str
     document_title: str
     document_type: str = "Quality Procedure"
     revision_number: int
     page_number: int
     purpose: str
-    iso_remarks: str
-    dcc_remarks: str
+    #iso_remarks: str omitted, will include in "update" of drrrf
+    #dcc_remarks: str omitted, will include in "update" of drrrf
     slug: str
-    registration_mark: str
-    registration_date: datetime = "0001-01-01T00:00:00.00Z"
-    distribution_mark: str
-    distribution_date: datetime = "0001-01-01T00:00:00.00Z"
+    #registration_mark: str
+    #registration_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
+    #distribution_mark: str
+    #distribution_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
     date_created: datetime
 
 class DRRRFCreate(DRRRFBase):

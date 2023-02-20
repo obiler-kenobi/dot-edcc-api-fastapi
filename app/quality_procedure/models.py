@@ -55,6 +55,8 @@ class DRRRF(Base):
     distribution_date = Column(DateTime, nullable=True)
     date_created = Column(TIMESTAMP, nullable=False)
 
+    #should add created_by
+
 class InterfacingUnit(Base):
     __tablename__ = "intefacing_unit" #Interfacing Units to Review the Quality Procedure
 
