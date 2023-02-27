@@ -3,11 +3,16 @@ from fastapi import APIRouter, Depends, status
 
 from sqlalchemy.orm import Session
 
-from app.quality_procedure.schemas import (QualityProcedureDocumentRequest, QualityProcedureDocumentRequestCreate, QPRequestHistory, QPRequestHistoryCreate) #QP REQUESTS
+from app.quality_procedure.schemas import (
+    QualityProcedureDocumentRequest, 
+    QualityProcedureDocumentRequestStatusUpdate,
+    QualityProcedureDocumentRequestCreate, 
+    QPRequestHistory, 
+    QPRequestHistoryCreate) #QP REQUESTS
 from app.quality_procedure.schemas import DRRRF, DRRRFCreate, InterfacingUnit, InterfacingUnitCreate, IUReviewSummary, IUReviewSummaryCreate
 from app.quality_procedure.services import QualityProcedureDocumentRequestManager, DRRRFManager
-from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPScope, QPScopeCreate, QPDefinitionOfTerm, QPDefinitionOfTermCreate, QPReferenceDocument, QPReferenceDocumentCreate, QPResponsiblityAndAuthority, QPResponsiblityAndAuthorityCreate, QPProcedure, QPProcedureCreate, QPProcess, QPProcessCreate, QPProcessInCharge, QPProcessInChargeCreate, QPProcessNote, QPProcessNoteCreate, QPProcessRecord, QPProcessRecordCreate, QPReport, QPReportCreate, QPPerformanceIndicator, QPPerformanceIndicatorCreate, QPAttachmentAndForm, QPAttachmentAndFormCreate
-from app.quality_procedure.services import QualityProcedureManager
+from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPScope, QPScopeCreate, QPDefinitionOfTerm, QPDefinitionOfTermCreate, QPReferenceDocument, QPReferenceDocumentCreate, QPResponsiblityAndAuthority, QPResponsiblityAndAuthorityCreate, QPProcedure, QPProcedureCreate, QPProcess, QPProcessCreate, QPProcessInCharge, QPProcessInChargeCreate, QPProcessNote, QPProcessNoteCreate, QPProcessRecord, QPProcessRecordCreate, QPReport, QPReportCreate, QPPerformanceIndicator, QPPerformanceIndicatorCreate, QPAttachmentAndForm, QPAttachmentAndFormCreate, Status, StatusCreate
+from app.quality_procedure.services import QualityProcedureManager, StatusManager
 from app.deps import get_db
 
 quality_procedure_router = APIRouter()
@@ -18,8 +23,8 @@ quality_procedure_router = APIRouter()
     response_model=List[QualityProcedureDocumentRequest],
     status_code=status.HTTP_200_OK
 )
-def get_all_quality_procedure_document_requests(db: Session = Depends(get_db)):
-    return QualityProcedureDocumentRequestManager.get_all_quality_procedure_document_requests(db)
+def get_all_active_quality_procedure_document_requests(db: Session = Depends(get_db)):
+    return QualityProcedureDocumentRequestManager.get_all_active_quality_procedure_document_requests(db)
 
 #CREATE QP REQUEST
 @quality_procedure_router.post(
@@ -29,6 +34,15 @@ def get_all_quality_procedure_document_requests(db: Session = Depends(get_db)):
 )
 def create_quality_procedure_document_request(quality_procedure_document_request: QualityProcedureDocumentRequestCreate, db: Session = Depends(get_db)):
     return QualityProcedureDocumentRequestManager.create_quality_procedure_document_request(db, quality_procedure_document_request)
+
+#UPDATE QP REQUEST STATUS
+@quality_procedure_router.patch(
+    "/qp-document-requests/{request_id}",
+    response_model=QualityProcedureDocumentRequest,
+    status_code=status.HTTP_200_OK
+)
+def update_quality_procedure_document_request_status(request_id: int, quality_procedure_document_request: QualityProcedureDocumentRequestStatusUpdate, db: Session = Depends(get_db)):
+    return QualityProcedureDocumentRequestManager.update_quality_procedure_document_request_status(db, request_id, quality_procedure_document_request)
 
 #GET ALL QP REQUEST HISTORY
 @quality_procedure_router.get(
@@ -56,6 +70,15 @@ def create_qp_request_history(qp_request_history: QPRequestHistoryCreate, db: Se
 )
 def get_all_drrrfs(db: Session = Depends(get_db)):
     return DRRRFManager.get_all_drrrfs(db)
+
+#GET DRRRF
+@quality_procedure_router.get(
+    "/drrrfs/{slug}",
+    response_model=DRRRF,
+    status_code=status.HTTP_200_OK
+)
+def get_drrrf(slug: str, db: Session = Depends(get_db)):
+    return DRRRFManager.get_drrrf(db, slug)
 
 #CREATE DRRRF
 @quality_procedure_router.post(
@@ -112,14 +135,14 @@ def create_iu_review_summary(iu_review_summary: IUReviewSummaryCreate, db: Sessi
 def get_all_title_page(db: Session = Depends(get_db)):
     return QualityProcedureManager.get_all_title_page(db)
 
-#CREATE IU REVIEW SUMMARY
+#CREATE TITLE PAGE
 @quality_procedure_router.post(
-    "/quality-procedures/title-pages",
+    "/quality-procedures/{drrrf_id}/title-pages",
     response_model=QPTitlePage,
     status_code=status.HTTP_201_CREATED
 )
-def create_title_page(title_page: QPTitlePageCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_title_page(db, title_page)
+def create_title_page(drrrf_id: int, title_page: QPTitlePageCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_title_page(db, title_page, drrrf_id)
 
 #GET ALL OBJECTIVE
 @quality_procedure_router.get(
@@ -132,12 +155,12 @@ def get_all_objectives(db: Session = Depends(get_db)):
 
 #CREATE OBJECTIVE
 @quality_procedure_router.post(
-    "/quality-procedures/objectives",
+    "/quality-procedures/{drrrf_id}/objectives",
     response_model=QPObjective,
     status_code=status.HTTP_201_CREATED
 )
-def create_objective(objective: QPObjectiveCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_objective(db, objective)
+def create_objective(drrrf_id: int, objective: QPObjectiveCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_objective(db, objective, drrrf_id)
 
 #GET ALL SCOPE
 @quality_procedure_router.get(
@@ -150,12 +173,12 @@ def get_all_scopes(db: Session = Depends(get_db)):
 
 #CREATE SCOPE
 @quality_procedure_router.post(
-    "/quality-procedures/scopes",
+    "/quality-procedures/{drrrf_id}/scopes",
     response_model=QPScope,
     status_code=status.HTTP_201_CREATED
 )
-def create_scope(scope: QPScopeCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_scope(db, scope)
+def create_scope(drrrf_id: int, scope: QPScopeCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_scope(db, scope, drrrf_id)
 
 #GET ALL DEFINITION OF TERM
 @quality_procedure_router.get(
@@ -175,6 +198,15 @@ def get_all_definition_of_terms(db: Session = Depends(get_db)):
 def create_definition_of_term(definition_of_term: QPDefinitionOfTermCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_definition_of_term(db, definition_of_term)
 
+#CREATE DEFINITION OF TERM
+@quality_procedure_router.post(
+    "/quality-procedures/{drrrf_id}/definition-of-terms",
+    response_model=QPDefinitionOfTerm,
+    status_code=status.HTTP_201_CREATED
+)
+def create_definition_of_term(drrrf_id: int, definition_of_term: QPDefinitionOfTermCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_definition_of_term(db, definition_of_term, drrrf_id)
+
 #GET ALL REFERENCE DOCUMENT
 @quality_procedure_router.get(
     "/quality-procedures/reference-documents",
@@ -186,12 +218,12 @@ def get_all_reference_document(db: Session = Depends(get_db)):
 
 #CREATE REFERENCE DOCUMENT
 @quality_procedure_router.post(
-    "/quality-procedures/reference-documents",
+    "/quality-procedures/{drrrf_id}/reference-documents",
     response_model=QPReferenceDocument,
     status_code=status.HTTP_201_CREATED
 )
-def create_definition_of_term(reference_document: QPReferenceDocumentCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_reference_document(db, reference_document)
+def create_definition_of_term(drrrf_id: int, reference_document: QPReferenceDocumentCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_reference_document(db, reference_document, drrrf_id)
 
 #GET ALL RESPONSIBLITY AND AUTHORITY
 @quality_procedure_router.get(
@@ -202,14 +234,23 @@ def create_definition_of_term(reference_document: QPReferenceDocumentCreate, db:
 def get_all_responsibility_and_authority(db: Session = Depends(get_db)):
     return QualityProcedureManager.get_all_responsibility_and_authority(db)
 
-#CREATE REFERENCE DOCUMENT
+#GET ALL RESPONSIBLITY AND AUTHORITY
+@quality_procedure_router.get(
+    "/quality-procedures/{drrrf_id}/responsiblities-and-authorities",
+    response_model=List[QPResponsiblityAndAuthority],
+    status_code=status.HTTP_200_OK
+)
+def get_all_drrrf_responsibility_and_authority(drrrf_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_drrrf_responsibility_and_authority(db, drrrf_id)
+
+#CREATE RESPONSIBILITIES AND AUTHORITIES
 @quality_procedure_router.post(
-    "/quality-procedures/responsiblities-and-authorities",
+    "/quality-procedures/{drrrf_id}/responsibilities-and-authorities",
     response_model=QPResponsiblityAndAuthority,
     status_code=status.HTTP_201_CREATED
 )
-def create_responsibility_and_authority(responsibility_and_authority: QPResponsiblityAndAuthorityCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_responsibility_and_authority(db, responsibility_and_authority)
+def create_responsibility_and_authority(drrrf_id: int, responsibility_and_authority: QPResponsiblityAndAuthorityCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_responsibility_and_authority(db, responsibility_and_authority, drrrf_id)
 
 #GET ALL PROCEDURE
 @quality_procedure_router.get(
@@ -221,17 +262,26 @@ def get_all_procedure(db: Session = Depends(get_db)):
     return QualityProcedureManager.get_all_procedure(db)
 
 #CREATE PROCEDURE
+@quality_procedure_router.get(
+    "/quality-procedures/{drrrf_id}/procedures",
+    response_model=List[QPProcedure],
+    status_code=status.HTTP_200_OK
+)
+def get_drrrf_procedures(drrrf_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_drrrf_procedures(db, drrrf_id)
+
+#CREATE PROCEDURE
 @quality_procedure_router.post(
-    "/quality-procedures/procedures",
+    "/quality-procedures/{drrrf_id}/procedures",
     response_model=QPProcedure,
     status_code=status.HTTP_201_CREATED
 )
-def create_procedure(procedure: QPProcedureCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_procedure(db, procedure)
+def create_procedure(drrrf_id: int, procedure: QPProcedureCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_procedure(db, procedure, drrrf_id)
 
 #GET ALL PROCESS
 @quality_procedure_router.get(
-    "/quality-procedures/process",
+    "/quality-procedures/processes",
     response_model=List[QPProcess],
     status_code=status.HTTP_200_OK
 )
@@ -240,12 +290,12 @@ def get_all_process(db: Session = Depends(get_db)):
 
 #CREATE PROCESS
 @quality_procedure_router.post(
-    "/quality-procedures/process",
+    "/quality-procedures/{drrrf_id}/procedures/{procedure_id}/processes",
     response_model=QPProcess,
     status_code=status.HTTP_201_CREATED
 )
-def create_procedure(process: QPProcessCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_process(db, process)
+def create_procedure(drrrf_id: int, procedure_id: int, process: QPProcessCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_process(db, process, drrrf_id, procedure_id)
 
 #GET ALL PROCESS NOTE
 @quality_procedure_router.get(
@@ -258,12 +308,12 @@ def get_all_process_note(db: Session = Depends(get_db)):
 
 #CREATE PROCESS NOTE
 @quality_procedure_router.post(
-    "/quality-procedures/process-notes",
+    "/quality-procedures/{drrrf_id}/processes/{process_id}/process-notes",
     response_model=QPProcessNote,
     status_code=status.HTTP_201_CREATED
 )
-def create_process_note(process_note: QPProcessNoteCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_process_note(db, process_note)
+def create_process_note(drrrf_id: int, process_id: int, process_note: QPProcessNoteCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_process_note(db, process_note, drrrf_id, process_id)
 
 #GET ALL PROCESS IN-CHARGE
 @quality_procedure_router.get(
@@ -276,12 +326,12 @@ def get_all_process_in_charge(db: Session = Depends(get_db)):
 
 #CREATE PROCESS IN-CHARGE
 @quality_procedure_router.post(
-    "/quality-procedures/process-in-charge",
+    "/quality-procedures/{drrrf_id}/processes/{process_id}/process-in-charge",
     response_model=QPProcessInCharge,
     status_code=status.HTTP_201_CREATED
 )
-def create_process_in_charge(process_in_charge: QPProcessInChargeCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_process_in_charge(db, process_in_charge)
+def create_process_in_charge(drrrf_id: int, process_id: int, process_in_charge: QPProcessInChargeCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_process_in_charge(db, process_in_charge, drrrf_id, process_id)
 
 #GET ALL PROCESS RECORD
 @quality_procedure_router.get(
@@ -292,14 +342,23 @@ def create_process_in_charge(process_in_charge: QPProcessInChargeCreate, db: Ses
 def get_all_process_record(db: Session = Depends(get_db)):
     return QualityProcedureManager.get_all_process_record(db)
 
+#GET ALL PROCESS PROCESS RECORD
+@quality_procedure_router.get(
+    "/quality-procedures/{process_id}/process-records",
+    response_model=List[QPProcessRecord],
+    status_code=status.HTTP_200_OK
+)
+def get_all_process_process_record(process_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_process_process_record(db, process_id)
+
 #CREATE PROCESS RECORD
 @quality_procedure_router.post(
-    "/quality-procedures/process-records",
+    "/quality-procedures/{drrrf_id}/processes/{process_id}/process-records",
     response_model=QPProcessRecord,
     status_code=status.HTTP_201_CREATED
 )
-def create_process_record(process_record: QPProcessRecordCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_process_record(db, process_record)
+def create_process_record(drrrf_id: int, process_id: int, process_record: QPProcessRecordCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_process_record(db, process_record, drrrf_id, process_id)
 
 #GET ALL PROCESS REPORT
 @quality_procedure_router.get(
@@ -312,12 +371,12 @@ def get_all_report(db: Session = Depends(get_db)):
 
 #CREATE PROCESS REPORT
 @quality_procedure_router.post(
-    "/quality-procedures/process-reports",
+    "/quality-procedures/{drrrf_id}/process-reports",
     response_model=QPReport,
     status_code=status.HTTP_201_CREATED
 )
-def create_report(report: QPReportCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_report(db, report)
+def create_report(drrrf_id: int, report: QPReportCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_report(db, report, drrrf_id)
 
 #GET ALL PERFORMANCE INDICATORS
 @quality_procedure_router.get(
@@ -330,12 +389,12 @@ def get_all_performance_indicator(db: Session = Depends(get_db)):
 
 #CREATE PROCESS REPORT
 @quality_procedure_router.post(
-    "/quality-procedures/performance-indicators",
+    "/quality-procedures/{drrrf_id}/performance-indicators",
     response_model=QPPerformanceIndicator,
     status_code=status.HTTP_201_CREATED
 )
-def create_performance_indicator(performance_indicator: QPPerformanceIndicatorCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_performance_indicator(db, performance_indicator)
+def create_performance_indicator(drrrf_id: int, performance_indicator: QPPerformanceIndicatorCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_performance_indicator(db, performance_indicator, drrrf_id)
 
 #GET ALL ATTACHMENT AND FORM
 @quality_procedure_router.get(
@@ -346,11 +405,37 @@ def create_performance_indicator(performance_indicator: QPPerformanceIndicatorCr
 def get_all_attachment_and_form(db: Session = Depends(get_db)):
     return QualityProcedureManager.get_all_attachment_and_form(db)
 
+#GET ALL DRRRF ATTACHMENT AND FORM
+@quality_procedure_router.get(
+    "/quality-procedures/{drrrf_id}/attachments-and-forms",
+    response_model=List[QPAttachmentAndForm],
+    status_code=status.HTTP_200_OK
+)
+def get_all_drrrf_attachment_and_form(drrrf_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_drrrf_attachment_and_form(db, drrrf_id)
+
 #CREATE ATTACHMENT AND FORM
 @quality_procedure_router.post(
-    "/quality-procedures/attachments-and-forms",
+    "/quality-procedures/{drrrf_id}/attachments-and-forms",
     response_model=QPAttachmentAndForm,
     status_code=status.HTTP_201_CREATED
 )
-def create_attachment_and_form(attachment_and_form: QPAttachmentAndFormCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_attachment_and_form(db, attachment_and_form)
+def create_attachment_and_form(drrrf_id: int, attachment_and_form: QPAttachmentAndFormCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_attachment_and_form(db, attachment_and_form, drrrf_id)
+
+#GET ALL STATUS
+@quality_procedure_router.get(
+    "/status",
+    response_model=List[Status],
+    status_code=status.HTTP_200_OK
+)
+def get_all_status(db: Session = Depends(get_db)):
+    return StatusManager.get_all_status(db)
+
+@quality_procedure_router.post(
+    "/status",
+    response_model=Status,
+    status_code=status.HTTP_201_CREATED
+)
+def create_status(status: StatusCreate, db: Session = Depends(get_db)):
+    return StatusManager.create_status(db, status)

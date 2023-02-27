@@ -17,6 +17,7 @@ class QualityProcedureDocumentRequest(Base):
     document_number = Column(String(100), nullable=True) #might remove
     status_id = Column(Integer, nullable=False)
     action_id = Column(Integer, nullable=False)
+    #should add current quality procedure ID
 
     qp_request_history = relationship("QPRequestHistory", back_populates="quality_procedure_document_request")
 
@@ -36,7 +37,7 @@ class DRRRF(Base):
     __tablename__ = "drrrf" #Document Review Request and Registration Form
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    process_owner_id = Column(Integer, nullable=False)
+    process_owner_id = Column(Integer, ForeignKey("user.id"))
     current_process_owner_id = Column(Integer, nullable=False) #will need to find a way to automate but currently this is manual
     received_date = Column(TIMESTAMP, nullable=False)
     execution_date = Column(DateTime, nullable=True)
@@ -56,6 +57,20 @@ class DRRRF(Base):
     date_created = Column(TIMESTAMP, nullable=False)
 
     #should add created_by
+    #should add old quality procedure id
+    user = relationship("User", back_populates="drrrf")
+    qp_objective = relationship("QPObjective", back_populates="drrrf")
+    qp_scope = relationship("QPScope", back_populates="drrrf")
+    qp_definition_of_term = relationship("QPDefinitionOfTerm", back_populates="drrrf")
+    qp_reference_document = relationship("QPReferenceDocument", back_populates="drrrf")
+    qp_responsibility_and_authority = relationship("QPResponsbilityAndAuthority", back_populates="drrrf")
+    qp_procedure = relationship("QPProcedure", back_populates="drrrf")
+    qp_report = relationship("QPReport", back_populates="drrrf")
+    qp_performance_indicator = relationship("QPPerformanceIndicator", back_populates="drrrf")
+    qp_process = relationship("QPProcess", back_populates="drrrf")
+    qp_process_in_charge = relationship("QPProcessInCharge", back_populates="drrrf")
+    qp_process_record = relationship("QPProcessRecord", back_populates="drrrf")
+    qp_attachments_and_form = relationship("QPAttachmentAndForm", back_populates="drrrf")
 
 class InterfacingUnit(Base):
     __tablename__ = "intefacing_unit" #Interfacing Units to Review the Quality Procedure
@@ -168,75 +183,98 @@ class QPObjective(Base):
     __tablename__ = "qp_objective"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     objective = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_objective")
 
 class QPScope(Base):
     __tablename__ = "qp_scope"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     scope = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_scope")
 
 class QPDefinitionOfTerm(Base):
     __tablename__ = "qp_definition_of_term"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     term = Column(String(80), nullable=False)
     definition = Column(Text, nullable=False)
     #slug
     date_created = Column(TIMESTAMP, nullable=False)
 
+    drrrf = relationship("DRRRF", back_populates="qp_definition_of_term")
+
 class QPReferenceDocument(Base):
     __tablename__ = "qp_reference_document"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     reference_document = Column(Text, nullable=False)
     file_path = Column(String(150), nullable=True)
     date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_reference_document")
 
 class QPResponsbilityAndAuthority(Base):
     __tablename__ = "qp_responsibility_and_authority"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     authority = Column(String, nullable=False)
     responsibility = Column(Text, nullable=False)
     #slug
     date_created = Column(TIMESTAMP, nullable=False)
 
+    drrrf = relationship("DRRRF", back_populates="qp_responsibility_and_authority")
+    qp_process_in_charge = relationship("QPProcessInCharge", back_populates="qp_responsibility_and_authority")
+
 class QPProcedure(Base):
     __tablename__ = "qp_procedure"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     procedure = Column(Text, nullable=False)
     #slug
     date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_procedure")
+    qp_process = relationship("QPProcess", back_populates="qp_procedure")
 
 class QPProcess(Base):
     __tablename__ = "qp_process" 
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    procedure_id = Column(Integer, nullable=False)
-    drrrf_id = Column(Integer, nullable=False)
+    procedure_id = Column(Integer, ForeignKey("qp_procedure.id"))
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     process_title = Column(String(100), nullable=False)
     process_description = Column(Text, nullable=False) #WYSIWYG
     #slug
     date_created = Column(TIMESTAMP, nullable=False)
 
+    drrrf = relationship("DRRRF", back_populates="qp_process")
+    qp_procedure = relationship("QPProcedure", back_populates="qp_process")
+    qp_process_in_charge = relationship("QPProcessInCharge", back_populates="qp_process")
+    qp_process_record = relationship("QPProcessRecord", back_populates="qp_process")
+
 class QPProcessInCharge(Base):
     __tablename__ = "qp_process_in_charge"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    process_id = Column(Integer, nullable=False)
-    drrrf_id = Column(Integer, nullable=False) 
-    in_charge_id = Column(Integer, nullable=False)
+    process_id = Column(Integer, ForeignKey("qp_process.id"))
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id")) 
+    in_charge_id = Column(Integer, ForeignKey("qp_responsibility_and_authority.id"))
     date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_process_in_charge")
+    qp_process = relationship("QPProcess", back_populates="qp_process_in_charge")
+    qp_responsibility_and_authority = relationship("QPResponsbilityAndAuthority", back_populates="qp_process_in_charge")
 
 class QPProcessNote(Base):
     __tablename__ = "qp_process_note"
@@ -251,39 +289,58 @@ class QPProcessRecord(Base):
     __tablename__ = "qp_process_record"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    process_id = Column(Integer, nullable=False)
-    drrrf_id = Column(Integer, nullable=False)
+    process_id = Column(Integer, ForeignKey("qp_process.id"))
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     record = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
+
+    qp_process = relationship("QPProcess", back_populates="qp_process_record")
+    drrrf = relationship("DRRRF", back_populates="qp_process_record")
 
 class QPReport(Base):
     __tablename__ = "qp_report"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     report = Column(String(100), nullable=False)
     frequency = Column(String(150), nullable=False)
     in_charge = Column(String(70), nullable=False) #change to id to relate with responsiblity and authority
     date_created = Column(TIMESTAMP, nullable=False)
 
+    drrrf = relationship("DRRRF", back_populates="qp_report")
+
 class QPPerformanceIndicator(Base):
     __tablename__ = "qp_performance_indicator"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     in_charge = Column(String(100), nullable=False)
     indicator = Column(Text, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
+    
+    drrrf = relationship("DRRRF", back_populates="qp_performance_indicator")
 
 class QPAttachmentAndForm(Base):
     __tablename__ = "qp_attachments_and_form"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, nullable=False)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
     record = Column(String(100), nullable=False)
     control_number = Column(String(100), nullable=True)
     maintenance = Column(Integer, nullable=True)
     preservation = Column(Integer, nullable=True)
     remarks = Column(String(50), nullable=True)
     file_path = Column(String(100), nullable=True)
+    date_created = Column(TIMESTAMP, nullable=False) 
+    #include_in_lor boolean
+
+    drrrf = relationship("DRRRF", back_populates="qp_attachments_and_form")
+
+class Status(Base):
+    __tablename__ = "status"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    status = Column(String(150), nullable=False)
+    status_placement = Column(Integer, nullable=False)
+    created_by = Column(String(100), nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)

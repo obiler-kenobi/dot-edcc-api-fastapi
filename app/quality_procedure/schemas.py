@@ -2,6 +2,9 @@ from typing import List
 from datetime import datetime
 from pydantic import BaseModel
 
+from app.user.schemas import ProcessOwnerUser
+
+
 #QUALITY PROCEDURE REQUEST
 class QPRequestHistoryBase(BaseModel):
     comment: str
@@ -31,36 +34,16 @@ class QualityProcedureDocumentRequestCreate(QualityProcedureDocumentRequestBase)
 
 class QualityProcedureDocumentRequest(QualityProcedureDocumentRequestBase):
     id: int
+    status_id: int
+    action_id: int
     qp_request_history: List[QPRequestHistory] = []
 
     class Config:
         orm_mode = True
 
-#DRRRF
-class DRRRFBase(BaseModel):
-    received_date: datetime
-    #execution_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
-    document_number: str
-    document_title: str
-    document_type: str = "Quality Procedure"
-    revision_number: int
-    page_number: int
-    purpose: str
-    #iso_remarks: str omitted, will include in "update" of drrrf
-    #dcc_remarks: str omitted, will include in "update" of drrrf
-    slug: str
-    #registration_mark: str
-    #registration_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
-    #distribution_mark: str
-    #distribution_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
-    date_created: datetime
-
-class DRRRFCreate(DRRRFBase):
-    process_owner_id: int
-    current_process_owner_id: int
-
-class DRRRF(DRRRFBase):
-    id: int
+class QualityProcedureDocumentRequestStatusUpdate(BaseModel):
+    status_id: int
+    action_id: int
 
     class Config:
         orm_mode = True
@@ -104,10 +87,11 @@ class QPTitlePageBase(BaseModel):
     date_created: datetime
 
 class QPTitlePageCreate(QPTitlePageBase):
-    drrrf_id: int
+    pass
 
 class QPTitlePage(QPTitlePageBase):
     id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -118,10 +102,11 @@ class QPObjectiveBase(BaseModel):
     date_created: datetime
 
 class QPObjectiveCreate(QPObjectiveBase):
-    drrrf_id: int
+    pass
 
 class QPObjective(QPObjectiveBase):
     id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -132,10 +117,11 @@ class QPScopeBase(BaseModel):
     date_created: datetime
 
 class QPScopeCreate(QPScopeBase):
-    drrrf_id: int
+    pass
 
 class QPScope(QPScopeBase):
     id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -147,10 +133,11 @@ class QPDefinitionOfTermBase(BaseModel):
     date_created: datetime
 
 class QPDefinitionOfTermCreate(QPDefinitionOfTermBase):
-    drrrf_id: int
+    pass
 
 class QPDefinitionOfTerm(QPDefinitionOfTermBase):
     id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -162,10 +149,11 @@ class QPReferenceDocumentBase(BaseModel):
     date_created: datetime
 
 class QPReferenceDocumentCreate(QPReferenceDocumentBase):
-    drrrf_id: int
+    pass
 
 class QPReferenceDocument(QPReferenceDocumentBase):
     id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -177,55 +165,11 @@ class QPResponsiblityAndAuthorityBase(BaseModel):
     date_created: datetime
 
 class QPResponsiblityAndAuthorityCreate(QPResponsiblityAndAuthorityBase):
-    drrrf_id: int
+    pass
 
 class QPResponsiblityAndAuthority(QPResponsiblityAndAuthorityBase):
     id: int
-
-    class Config:
-        orm_mode = True
-
-#PROCEDURE
-class QPProcedureBase(BaseModel):
-    procedure: str
-    date_created: datetime
-
-class QPProcedureCreate(QPProcedureBase):
     drrrf_id: int
-
-class QPProcedure(QPProcedureBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-#PROCESS
-class QPProcessBase(BaseModel):
-    process_title: str
-    process_description: str
-    date_created: datetime
-
-class QPProcessCreate(QPProcessBase):
-    drrrf_id: int
-    procedure_id: int
-
-class QPProcess(QPProcessBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-#PROCESS IN CHARGE
-class QPProcessInChargeBase(BaseModel):
-    date_created: datetime
-
-class QPProcessInChargeCreate(QPProcessInChargeBase):
-    in_charge_id: int
-    process_id: int
-    drrrf_id: int
-
-class QPProcessInCharge(QPProcessInChargeBase):
-    id: int
 
     class Config:
         orm_mode = True
@@ -236,11 +180,12 @@ class QPProcessNoteBase(BaseModel):
     date_created: datetime
 
 class QPProcessNoteCreate(QPProcessNoteBase):
-    process_id: int
-    drrrf_id: int
+    pass
 
 class QPProcessNote(QPProcessNoteBase):
     id: int
+    process_id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -251,11 +196,12 @@ class QPProcessRecordBase(BaseModel):
     date_created: datetime
 
 class QPProcessRecordCreate(QPProcessRecordBase):
-    process_id: int
-    drrrf_id: int
+    pass
 
 class QPProcessRecord(QPProcessRecordBase):
     id: int
+    process_id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -264,14 +210,15 @@ class QPProcessRecord(QPProcessRecordBase):
 class QPReportBase(BaseModel):
     report: str
     frequency: str
-    in_charge: str
+    in_charge: str #might change in in_charge_id
     date_created: datetime
 
 class QPReportCreate(QPReportBase):
-    drrrf_id: int
+    pass
 
 class QPReport(QPReportBase):
     id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -283,10 +230,11 @@ class QPPerformanceIndicatorBase(BaseModel):
     date_created: datetime
 
 class QPPerformanceIndicatorCreate(QPPerformanceIndicatorBase):
-    drrrf_id: int
+    pass
 
 class QPPerformanceIndicator(QPPerformanceIndicatorBase):
     id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
@@ -294,18 +242,126 @@ class QPPerformanceIndicator(QPPerformanceIndicatorBase):
 #ATTACHMENT AND FORM
 class QPAttachmentAndFormBase(BaseModel):
     record: str
-    control_number: str
-    maintenance: int
-    preservation: int
-    remarks: str
-    file_path: str
+    #control_number: str omitted, will be available on LOR
+    #maintenance: int omitted, will be available on LOR
+    #preservation: int omitted, will be available on LOR
+    #remarks: str omitted, will be available on LOR
+    #file_path: str omitted, will be available on LOR
+    #include_in_lor: bool omitted, will be available on 9.0
     date_created: datetime
 
 class QPAttachmentAndFormCreate(QPAttachmentAndFormBase):
-    drrrf_id: int
+    pass
 
 class QPAttachmentAndForm(QPAttachmentAndFormBase):
     id: int
+    drrrf_id: int
+
+    class Config:
+        orm_mode = True
+
+class StatusBase(BaseModel):
+    status: str
+    status_placement: int
+    created_by: str
+    date_created: datetime
+
+class StatusCreate(StatusBase):
+    pass
+
+class Status(StatusBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+    
+
+#PROCESS IN CHARGE
+class QPProcessInChargeBase(BaseModel):
+    date_created: datetime
+
+class QPProcessInChargeCreate(QPProcessInChargeBase):
+    in_charge_id: int
+
+class QPProcessInCharge(QPProcessInChargeBase):
+    id: int 
+    process_id: int
+    drrrf_id: int
+    qp_responsibility_and_authority: QPResponsiblityAndAuthority = []
+
+    class Config:
+        orm_mode = True
+
+#PROCESS
+class QPProcessBase(BaseModel):
+    process_title: str
+    process_description: str
+    date_created: datetime
+
+class QPProcessCreate(QPProcessBase):
+    pass
+
+class QPProcess(QPProcessBase):
+    id: int
+    drrrf_id: int
+    procedure_id: int
+    qp_process_in_charge: List[QPProcessInCharge] = []
+    qp_process_record: List[QPProcessRecord] = []
+
+    class Config:
+        orm_mode = True
+
+#PROCEDURE
+class QPProcedureBase(BaseModel):
+    procedure: str
+    date_created: datetime
+
+class QPProcedureCreate(QPProcedureBase):
+    pass
+
+class QPProcedure(QPProcedureBase):
+    id: int
+    drrrf_id: int
+    qp_process: List[QPProcess] = []
+
+    class Config:
+        orm_mode = True
+
+#DRRRF
+class DRRRFBase(BaseModel):
+    received_date: datetime
+    #execution_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
+    document_number: str
+    document_title: str
+    document_type: str = "Quality Procedure"
+    revision_number: int
+    page_number: int
+    purpose: str
+    #iso_remarks: str omitted, will include in "update" of drrrf
+    #dcc_remarks: str omitted, will include in "update" of drrrf
+    slug: str
+    #registration_mark: str
+    #registration_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
+    #distribution_mark: str
+    #distribution_date: datetime = "0001-01-01T00:00:00.00Z" omitted, will include in "update" of drrrf
+    date_created: datetime
+
+class DRRRFCreate(DRRRFBase):
+    process_owner_id: int
+    current_process_owner_id: int
+
+class DRRRF(DRRRFBase):
+    id: int
+    user: ProcessOwnerUser = []
+    qp_objective: List[QPObjective] = []
+    qp_scope: List[QPScope] = []
+    qp_definition_of_term: List[QPDefinitionOfTerm] = []
+    qp_reference_document: List[QPReferenceDocument] = []
+    qp_responsibility_and_authority: List[QPResponsiblityAndAuthority] = []
+    qp_procedure: List[QPProcedure] = []
+    qp_report: List[QPReport] = []
+    qp_performance_indicator: List[QPPerformanceIndicator] = []
+    qp_attachments_and_form: List[QPAttachmentAndForm] = []
 
     class Config:
         orm_mode = True

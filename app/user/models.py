@@ -59,5 +59,6 @@ class User(Base):
     created_by = Column(String(40), nullable=False)
 
     user_basic_information = relationship("UserBasicInformation", back_populates="user")
+    drrrf = relationship("DRRRF", back_populates="user")
 
 

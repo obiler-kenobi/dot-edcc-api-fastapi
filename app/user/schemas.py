@@ -76,6 +76,13 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
+class ProcessOwnerUser(BaseModel):
+    id: int
+    user_basic_information: List[UserBasicInformation] = []
+
+    class Config:
+        orm_mode = True
+
 
 
     
