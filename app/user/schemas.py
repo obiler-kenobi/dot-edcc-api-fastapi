@@ -51,7 +51,7 @@ class UserBasicInformationBase(BaseModel):
 class UserBasicInformationCreate(UserBasicInformationBase):
     user_id: int
 
-class UserBasicInformation(UserBasicInformationBase):
+class UserBasicInformation(UserBasicInformationCreate):
     id: int
     user_office_information: List[UserOffices] = []
 
@@ -71,6 +71,12 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
+    user_basic_information: List[UserBasicInformation] = []
+
+    class Config:
+        orm_mode = True
+
+class UserInformation(BaseModel):
     user_basic_information: List[UserBasicInformation] = []
 
     class Config:

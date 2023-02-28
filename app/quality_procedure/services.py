@@ -2,11 +2,10 @@ from app.quality_procedure import models
 
 from sqlalchemy.orm import Session
 
-from fastapi.encoders import jsonable_encoder
-
-from app.quality_procedure.schemas import QualityProcedureDocumentRequestStatusUpdate, QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, InterfacingUnitCreate, IUReviewSummaryCreate
+from app.quality_procedure.schemas import QualityProcedureDocumentRequestStatusUpdate, QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnitCreate, IUReviewSummaryCreate
 from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPScopeCreate, QPDefinitionOfTermCreate, QPReferenceDocumentCreate, QPResponsiblityAndAuthorityCreate, QPProcedureCreate, QPProcessCreate, QPProcessInChargeCreate, QPProcessNoteCreate, QPProcessRecordCreate, QPReportCreate, QPPerformanceIndicatorCreate, QPAttachmentAndFormCreate
 from app.quality_procedure.schemas import StatusCreate
+from app.quality_procedure.schemas import DistributionListCreate
 
 class QualityProcedureDocumentRequestManager(object): 
     @staticmethod
@@ -48,9 +47,51 @@ class DRRRFManager(object):
     def get_all_drrrfs(db: Session, skip: int = 0, limit: int = 100):
         return db.query(models.DRRRF).offset(skip).limit(limit).all()
     
+    def get_all_ongoing_drrrfs(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.DRRRF).filter(models.DRRRF.drrrf_status == 'ongoing').offset(skip).limit(limit).all()
+    
+    def get_all_registered_drrrfs(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.DRRRF).filter(models.DRRRF.drrrf_status == 'registered').offset(skip).limit(limit).all()
+    
+    def get_all_distributed_drrrfs(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.DRRRF).filter(models.DRRRF.drrrf_status == 'distributed').offset(skip).limit(limit).all()
+    
+    def get_all_obsolete_drrrfs(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.DRRRF).filter(models.DRRRF.drrrf_status == 'obsolete').offset(skip).limit(limit).all()
+
     @staticmethod
     def get_drrrf(db: Session, slug: str):
         return db.query(models.DRRRF).filter(models.DRRRF.slug == slug).first()
+    
+    @staticmethod
+    def approve_quality_procedure(db: Session, drrrf_id: int, drrrf_status: DRRRFStatusUpdate):
+        stored_item_data = db.query(models.DRRRF).filter(models.DRRRF.id == drrrf_id).first()
+        update_data = drrrf_status.dict(exclude_unset=True)
+        db.query(models.DRRRF).filter(models.DRRRF.id == drrrf_id).update(update_data, synchronize_session=False)
+        
+        db.commit()
+        db.refresh(stored_item_data)
+        return stored_item_data
+    
+    @staticmethod
+    def obsolete_quality_procedure(db: Session, drrrf_id: int, drrrf_status: DRRRFStatusUpdate):
+        stored_item_data = db.query(models.DRRRF).filter(models.DRRRF.id == drrrf_id).first()
+        update_data = drrrf_status.dict(exclude_unset=True)
+        db.query(models.DRRRF).filter(models.DRRRF.id == drrrf_id).update(update_data, synchronize_session=False)
+        
+        db.commit()
+        db.refresh(stored_item_data)
+        return stored_item_data
+    
+    @staticmethod
+    def distribute_quality_procedure(db: Session, drrrf_id: int, drrrf_distribute: DRRRFDistributeUpdate):
+        stored_item_data = db.query(models.DRRRF).filter(models.DRRRF.id == drrrf_id).first()
+        update_data = drrrf_distribute.dict(exclude_unset=True)
+        db.query(models.DRRRF).filter(models.DRRRF.id == drrrf_id).update(update_data, synchronize_session=False)
+        
+        db.commit()
+        db.refresh(stored_item_data)
+        return stored_item_data
     
     @staticmethod
     def create_drrrf(db: Session, drrrf: DRRRFCreate):
@@ -296,3 +337,20 @@ class StatusManager(object):
         db.add(new_status)
         db.commit()
         return new_status
+    
+class DistributionListManager(object):
+    @staticmethod
+    def get_all_distribution_list(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPDistributionList).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def get_all_drrrf_distribution_list(db: Session, drrrf_id: int):
+        return db.query(models.QPDistributionList).filter(models.QPDistributionList.drrrf_id == drrrf_id).all()
+    
+    @staticmethod
+    def create_distribution_list(db: Session, distribution_list: DistributionListCreate):
+        new_distribution_list = models.QPDistributionList(**distribution_list.dict())
+
+        db.add(new_distribution_list)
+        db.commit()
+        return new_distribution_list

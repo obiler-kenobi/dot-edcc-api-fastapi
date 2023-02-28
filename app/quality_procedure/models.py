@@ -10,14 +10,15 @@ class QualityProcedureDocumentRequest(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     user_id = Column(Integer, nullable=False) #May change to requested_by
+    current_qp_id = Column(Integer, nullable=False)
     request_date = Column(TIMESTAMP, nullable=False)
     request_purpose = Column(String(150), nullable=False)
     request_type = Column(String(10), nullable=False)
     document_title = Column(String(150), nullable=False)
     document_number = Column(String(100), nullable=True) #might remove
+    revision_number = Column(Integer, nullable=False)
     status_id = Column(Integer, nullable=False)
     action_id = Column(Integer, nullable=False)
-    #should add current quality procedure ID
 
     qp_request_history = relationship("QPRequestHistory", back_populates="quality_procedure_document_request")
 
@@ -39,6 +40,7 @@ class DRRRF(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     process_owner_id = Column(Integer, ForeignKey("user.id"))
     current_process_owner_id = Column(Integer, nullable=False) #will need to find a way to automate but currently this is manual
+    previous_qp_id = Column(Integer, nullable=False)
     received_date = Column(TIMESTAMP, nullable=False)
     execution_date = Column(DateTime, nullable=True)
     document_number = Column(String(100), nullable=True)
@@ -55,9 +57,9 @@ class DRRRF(Base):
     distribution_mark = Column(Text, nullable=True)
     distribution_date = Column(DateTime, nullable=True)
     date_created = Column(TIMESTAMP, nullable=False)
+    created_by = Column(String(15), nullable=False)
+    drrrf_status = Column(String(15), nullable=False)
 
-    #should add created_by
-    #should add old quality procedure id
     user = relationship("User", back_populates="drrrf")
     qp_objective = relationship("QPObjective", back_populates="drrrf")
     qp_scope = relationship("QPScope", back_populates="drrrf")
@@ -71,6 +73,7 @@ class DRRRF(Base):
     qp_process_in_charge = relationship("QPProcessInCharge", back_populates="drrrf")
     qp_process_record = relationship("QPProcessRecord", back_populates="drrrf")
     qp_attachments_and_form = relationship("QPAttachmentAndForm", back_populates="drrrf")
+    qp_distribution_list = relationship("QPDistributionList", back_populates="drrrf")
 
 class InterfacingUnit(Base):
     __tablename__ = "intefacing_unit" #Interfacing Units to Review the Quality Procedure
@@ -344,3 +347,16 @@ class Status(Base):
     status_placement = Column(Integer, nullable=False)
     created_by = Column(String(100), nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
+
+class QPDistributionList(Base):
+    __tablename__ = "qp_distribution_list"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
+    interfacing_unit_id = Column(Integer, ForeignKey("user.id"))
+    created_by = Column(String(100), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_distribution_list")
+    user = relationship("User", back_populates="qp_distribution_list")
+    

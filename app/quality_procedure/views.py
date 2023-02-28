@@ -9,10 +9,12 @@ from app.quality_procedure.schemas import (
     QualityProcedureDocumentRequestCreate, 
     QPRequestHistory, 
     QPRequestHistoryCreate) #QP REQUESTS
-from app.quality_procedure.schemas import DRRRF, DRRRFCreate, InterfacingUnit, InterfacingUnitCreate, IUReviewSummary, IUReviewSummaryCreate
+from app.quality_procedure.schemas import DRRRF, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnit, InterfacingUnitCreate, IUReviewSummary, IUReviewSummaryCreate
 from app.quality_procedure.services import QualityProcedureDocumentRequestManager, DRRRFManager
 from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPScope, QPScopeCreate, QPDefinitionOfTerm, QPDefinitionOfTermCreate, QPReferenceDocument, QPReferenceDocumentCreate, QPResponsiblityAndAuthority, QPResponsiblityAndAuthorityCreate, QPProcedure, QPProcedureCreate, QPProcess, QPProcessCreate, QPProcessInCharge, QPProcessInChargeCreate, QPProcessNote, QPProcessNoteCreate, QPProcessRecord, QPProcessRecordCreate, QPReport, QPReportCreate, QPPerformanceIndicator, QPPerformanceIndicatorCreate, QPAttachmentAndForm, QPAttachmentAndFormCreate, Status, StatusCreate
 from app.quality_procedure.services import QualityProcedureManager, StatusManager
+from app.quality_procedure.schemas import DistributionList, DistributionListCreate
+from app.quality_procedure.services import DistributionListManager
 from app.deps import get_db
 
 quality_procedure_router = APIRouter()
@@ -71,7 +73,43 @@ def create_qp_request_history(qp_request_history: QPRequestHistoryCreate, db: Se
 def get_all_drrrfs(db: Session = Depends(get_db)):
     return DRRRFManager.get_all_drrrfs(db)
 
-#GET DRRRF
+#GET ALL ONGOING DRRRF
+@quality_procedure_router.get(
+    "/drrrfs/ongoing",
+    response_model=List[DRRRF],
+    status_code=status.HTTP_200_OK
+)
+def get_all_ongoing_drrrfs(db: Session = Depends(get_db)):
+    return DRRRFManager.get_all_ongoing_drrrfs(db)
+
+#GET ALL REGISTERED DRRRF
+@quality_procedure_router.get(
+    "/drrrfs/registered",
+    response_model=List[DRRRF],
+    status_code=status.HTTP_200_OK
+)
+def get_all_registered_drrrfs(db: Session = Depends(get_db)):
+    return DRRRFManager.get_all_registered_drrrfs(db)
+
+#GET ALL DISTRIBUTED DRRRF
+@quality_procedure_router.get(
+    "/drrrfs/distributed",
+    response_model=List[DRRRF],
+    status_code=status.HTTP_200_OK
+)
+def get_all_distributed_drrrfs(db: Session = Depends(get_db)):
+    return DRRRFManager.get_all_distributed_drrrfs(db)
+
+#GET ALL DISTRIBUTED DRRRF
+@quality_procedure_router.get(
+    "/drrrfs/obsolete",
+    response_model=List[DRRRF],
+    status_code=status.HTTP_200_OK
+)
+def get_all_obsolete_drrrfs(db: Session = Depends(get_db)):
+    return DRRRFManager.get_all_obsolete_drrrfs(db)
+
+#GET DRRRF VIA SLUG
 @quality_procedure_router.get(
     "/drrrfs/{slug}",
     response_model=DRRRF,
@@ -88,6 +126,34 @@ def get_drrrf(slug: str, db: Session = Depends(get_db)):
 )
 def create_drrrf(drrrf: DRRRFCreate, db: Session = Depends(get_db)):
     return DRRRFManager.create_drrrf(db, drrrf)
+
+#APPROVE QUALITY PROCEDURE
+@quality_procedure_router.patch(
+    "/drrrfs/{drrrf_id}/approve",
+    response_model=DRRRF,
+    status_code=status.HTTP_200_OK
+)
+def approve_quality_procedure(drrrf_id: int, drrrf_status: DRRRFStatusUpdate, db: Session = Depends(get_db)):
+    return DRRRFManager.approve_quality_procedure(db, drrrf_id, drrrf_status)
+
+#APPROVE QUALITY PROCEDURE
+@quality_procedure_router.patch(
+    "/drrrfs/{drrrf_id}/distribute",
+    response_model=DRRRF,
+    status_code=status.HTTP_200_OK
+)
+def distribute_quality_procedure(drrrf_id: int, drrrf_status: DRRRFDistributeUpdate, db: Session = Depends(get_db)):
+    return DRRRFManager.distribute_quality_procedure(db, drrrf_id, drrrf_status)
+
+#OBSOLETE QUALITY PROCEDURE
+@quality_procedure_router.patch(
+    "/drrrfs/{drrrf_id}/obsolete",
+    response_model=DRRRF,
+    status_code=status.HTTP_200_OK
+)
+def obsolete_quality_procedure(drrrf_id: int, drrrf_status: DRRRFStatusUpdate, db: Session = Depends(get_db)):
+    return DRRRFManager.obsolete_quality_procedure(db, drrrf_id, drrrf_status)
+
 
 #GET ALL INTERFACING UNIT
 @quality_procedure_router.get(
@@ -432,6 +498,7 @@ def create_attachment_and_form(drrrf_id: int, attachment_and_form: QPAttachmentA
 def get_all_status(db: Session = Depends(get_db)):
     return StatusManager.get_all_status(db)
 
+#CREATE STATUS
 @quality_procedure_router.post(
     "/status",
     response_model=Status,
@@ -439,3 +506,30 @@ def get_all_status(db: Session = Depends(get_db)):
 )
 def create_status(status: StatusCreate, db: Session = Depends(get_db)):
     return StatusManager.create_status(db, status)
+
+#GET ALL DISTRIBUTION LIST
+@quality_procedure_router.get(
+    "/distributions-list",
+    response_model=List[DistributionList],
+    status_code=status.HTTP_200_OK
+)
+def get_all_distribution_list(db: Session = Depends(get_db)):
+    return DistributionListManager.get_all_distribution_list(db)
+
+#GET ALL DRRRF DISTRIBUTION LIST
+@quality_procedure_router.get(
+    "/drrrfs/{drrrf_id}/distributions-list",
+    response_model=List[DistributionList],
+    status_code=status.HTTP_200_OK
+)
+def get_all_drrrf_distribution_list(drrrf_id: int, db: Session = Depends(get_db)):
+    return DistributionListManager.get_all_drrrf_distribution_list(db, drrrf_id)
+
+#CREATE DISTRIBUTION LIST
+@quality_procedure_router.post(
+    "/distributions-list",
+    response_model=DistributionList,
+    status_code=status.HTTP_201_CREATED
+)
+def create_distribution_list(distribution_list: DistributionListCreate, db: Session = Depends(get_db)):
+    return DistributionListManager.create_distribution_list(db, distribution_list)
