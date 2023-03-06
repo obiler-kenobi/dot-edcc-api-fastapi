@@ -339,14 +339,6 @@ class QPAttachmentAndForm(Base):
 
     drrrf = relationship("DRRRF", back_populates="qp_attachments_and_form")
 
-class Status(Base):
-    __tablename__ = "status"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    status = Column(String(150), nullable=False)
-    status_placement = Column(Integer, nullable=False)
-    created_by = Column(String(100), nullable=False)
-    date_created = Column(TIMESTAMP, nullable=False)
 
 class QPDistributionList(Base):
     __tablename__ = "qp_distribution_list"
