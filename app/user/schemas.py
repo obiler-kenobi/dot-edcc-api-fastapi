@@ -58,6 +58,13 @@ class UserBasicInformation(UserBasicInformationCreate):
     class Config:
         orm_mode = True
 
+class UserInformation(BaseModel):
+    first_name: str
+    middle_initial: str
+    last_name: str
+    designation: int
+
+
 class UserBase(BaseModel):
     username: str
     hashed_password: str = "DOTedcc@2022"
@@ -76,15 +83,16 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
-class UserInformation(BaseModel):
+class UserInformationSample(BaseModel):
     user_basic_information: List[UserBasicInformation] = []
 
     class Config:
         orm_mode = True
 
-class ProcessOwnerUser(BaseModel):
+class ProcessOwner(BaseModel):
     id: int
-    user_basic_information: List[UserBasicInformation] = []
+    role_id: int
+    user_basic_information: List[UserInformation] = []
 
     class Config:
         orm_mode = True

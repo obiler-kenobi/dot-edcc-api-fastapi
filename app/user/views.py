@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 
 from sqlalchemy.orm import Session
 
-from app.user.schemas import UserBasicInformation, UserBasicInformationCreate, UserOfficeInformation, UserOfficeInformationCreate, User, UserCreate
+from app.user.schemas import UserBasicInformation, UserBasicInformationCreate, UserOfficeInformation, UserOfficeInformationCreate, User, UserCreate, ProcessOwner
 from app.user.services import UserManager
 from app.deps import get_db
 

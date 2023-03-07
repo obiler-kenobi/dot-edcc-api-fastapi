@@ -1,0 +1,25 @@
+from sqlalchemy import TIMESTAMP, Boolean, Column, ForeignKey, Integer, String, DateTime, Text
+from sqlalchemy.orm import relationship
+
+from app.database import Base
+
+class QualityProcedureRequests(Base): 
+    __tablename__ = "quality_procedure_requests"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    quality_procedure_id = Column(Integer, nullable=False) 
+    request_type = Column(String(10), nullable=False)
+    document_title = Column(String(150), nullable=False)
+    document_number = Column(String(100), nullable=True)
+    request_purpose = Column(String(150), nullable=False)
+    revision_type = Column(String(50), nullable=False)
+    revision_number = Column(Integer, nullable=False)
+    status_id = Column(Integer, ForeignKey("status.id"))
+    status_actions_id = Column(Integer, ForeignKey("status_actions.id"))
+    requested_by = Column(Integer, ForeignKey("user.id"))
+    date_created = Column(TIMESTAMP, nullable=False)
+    date_updated = Column(TIMESTAMP, nullable=False)
+
+    status = relationship("Status", back_populates="quality_procedure_requests")
+    status_actions = relationship("StatusActions", back_populates="quality_procedure_requests")
+    user = relationship("User", back_populates="quality_procedure_requests")

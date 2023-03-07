@@ -61,5 +61,5 @@ class User(Base):
     user_basic_information = relationship("UserBasicInformation", back_populates="user")
     drrrf = relationship("DRRRF", back_populates="user")
     qp_distribution_list = relationship("QPDistributionList", back_populates="user")
-
+    quality_procedure_requests = relationship("QualityProcedureRequests", back_populates="user")
 

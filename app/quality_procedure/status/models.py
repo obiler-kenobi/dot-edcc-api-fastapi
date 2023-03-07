@@ -15,6 +15,8 @@ class Status(Base):
     date_created = Column(TIMESTAMP, nullable=False)
     date_updated = Column(TIMESTAMP, nullable=True)
 
+    quality_procedure_requests = relationship("QualityProcedureRequests", back_populates="status")
+
 class StatusActions(Base):
     __tablename__ = "status_actions"
 
@@ -24,3 +26,5 @@ class StatusActions(Base):
     created_by = Column(String(100), nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
     date_updated = Column(TIMESTAMP, nullable=True)
+
+    quality_procedure_requests = relationship("QualityProcedureRequests", back_populates="status_actions")

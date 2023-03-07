@@ -2,7 +2,7 @@ from typing import List
 from datetime import datetime
 from pydantic import BaseModel
 
-from app.user.schemas import ProcessOwnerUser, UserInformation
+from app.user.schemas import ProcessOwner, UserInformation
 
 
 #QUALITY PROCEDURE REQUEST
@@ -378,7 +378,7 @@ class DRRRFCreate(DRRRFBase):
 
 class DRRRF(DRRRFBase):
     id: int
-    user: ProcessOwnerUser = []
+    user: ProcessOwner = []
     qp_objective: List[QPObjective] = []
     qp_scope: List[QPScope] = []
     qp_definition_of_term: List[QPDefinitionOfTerm] = []
@@ -394,7 +394,7 @@ class DRRRF(DRRRFBase):
 
 class DRRRF(DRRRFBase):
     id: int
-    user: ProcessOwnerUser = []
+    user: ProcessOwner = []
     qp_objective: List[QPObjective] = []
     qp_scope: List[QPScope] = []
     qp_definition_of_term: List[QPDefinitionOfTerm] = []
@@ -410,7 +410,7 @@ class DRRRF(DRRRFBase):
 
 class RegisteredDRRRF(RegisteredDRRRFBase):
     id: int
-    user: ProcessOwnerUser = []
+    user: ProcessOwner = []
     qp_objective: List[QPObjective] = []
     qp_scope: List[QPScope] = []
     qp_definition_of_term: List[QPDefinitionOfTerm] = []
