@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, Boolean, Column, ForeignKey, Integer, String, DateTime, Text
+from sqlalchemy import TIMESTAMP, Text, Column, ForeignKey, Integer, String, DateTime, Text
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -11,8 +11,8 @@ class QualityProcedureRequests(Base):
     request_type = Column(String(10), nullable=False)
     document_title = Column(String(150), nullable=False)
     document_number = Column(String(100), nullable=True)
-    request_purpose = Column(String(150), nullable=False)
-    revision_type = Column(String(50), nullable=False)
+    request_purpose = Column(Text, nullable=False)
+    revision_type = Column(String(10), nullable=False)
     revision_number = Column(Integer, nullable=False)
     status_id = Column(Integer, ForeignKey("status.id"))
     status_actions_id = Column(Integer, ForeignKey("status_actions.id"))
@@ -23,3 +23,16 @@ class QualityProcedureRequests(Base):
     status = relationship("Status", back_populates="quality_procedure_requests")
     status_actions = relationship("StatusActions", back_populates="quality_procedure_requests")
     user = relationship("User", back_populates="quality_procedure_requests")
+    quality_procedure_request_history = relationship("QualityProcedureRequestHistory", back_populates="quality_procedure_requests")
+
+class QualityProcedureRequestHistory(Base):
+    __tablename__ = "quality_procedure_request_history"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    request_id = Column(Integer, ForeignKey("quality_procedure_requests.id"))
+    user_id = Column(Integer, ForeignKey("user.id"))
+    remarks = Column(String(150), nullable=False)
+    date_craeated = Column(TIMESTAMP, nullable=False)
+
+    quality_procedure_requests = relationship("QualityProcedureRequests", back_populates="quality_procedure_request_history")
+    user = relationship("User", back_populates="quality_procedure_request_history")

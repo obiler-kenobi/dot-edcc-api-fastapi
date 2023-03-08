@@ -9,7 +9,7 @@ class QualityProcedureRequestBase(BaseModel):
     document_number: str
     request_purpose: str
     revision_type: str
-    revision_number: str
+    revision_number: int
     date_created: datetime
     date_updated: datetime
 
