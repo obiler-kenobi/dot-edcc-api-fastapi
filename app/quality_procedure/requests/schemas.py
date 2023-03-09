@@ -2,6 +2,9 @@ from typing import List
 from datetime import datetime
 from pydantic import BaseModel
 
+from app.user.schemas import ProcessOwner
+from app.quality_procedure.status.schemas import StatusDescription, StatusAction
+
 class QualityProcedureRequestBase(BaseModel):  
     quality_procedure_id: int
     request_type: str 
@@ -20,6 +23,9 @@ class QualityProcedureRequestCreate(QualityProcedureRequestBase):
 
 class QualityProcedureRequest(QualityProcedureRequestBase):
     id: int
+    user: ProcessOwner = []
+    status: StatusDescription = []
+    status_actions: StatusAction = []
 
     class Config:
         orm_mode = True

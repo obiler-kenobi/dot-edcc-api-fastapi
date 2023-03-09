@@ -58,13 +58,6 @@ class UserBasicInformation(UserBasicInformationCreate):
     class Config:
         orm_mode = True
 
-class UserInformation(BaseModel):
-    first_name: str
-    middle_initial: str
-    last_name: str
-    designation: int
-
-
 class UserBase(BaseModel):
     username: str
     hashed_password: str = "DOTedcc@2022"
@@ -89,10 +82,30 @@ class UserInformationSample(BaseModel):
     class Config:
         orm_mode = True
 
+#PROCESS OWNERS DATA INFORMATION
+class ProcessOwnerOfficeInformation(BaseModel):
+    dot_office_id: int
+    dot_office: DOTOfficeLabel
+    dot_division_id: int
+    dot_division: DOTDivisionLabel
+
+    class Config:
+        orm_mode = True
+
+class ProcessOwnerBasicInformation(BaseModel):
+    first_name: str
+    middle_initial: str
+    last_name: str
+    designation: int
+    user_office_information: List[ProcessOwnerOfficeInformation] = []
+
+    class Config:
+        orm_mode = True
+
 class ProcessOwner(BaseModel):
     id: int
     role_id: int
-    user_basic_information: List[UserInformation] = []
+    user_basic_information: List[ProcessOwnerBasicInformation] = []
 
     class Config:
         orm_mode = True

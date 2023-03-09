@@ -16,6 +16,12 @@ class Status(StatusBase):
     class Config:
         orm_mode = True
 
+class StatusDescription(BaseModel):
+    status_description: str
+
+    class Config:
+        orm_mode = True
+
 class StatusActionsBase(BaseModel):
     action: str
     action_description: str
@@ -25,6 +31,12 @@ class StatusActionsBase(BaseModel):
 
 class StatusActions(StatusActionsBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+class StatusAction(BaseModel):
+    action: str
 
     class Config:
         orm_mode = True

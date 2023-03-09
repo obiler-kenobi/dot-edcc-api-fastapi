@@ -2,7 +2,7 @@ from typing import List
 from datetime import datetime
 from pydantic import BaseModel
 
-from app.user.schemas import ProcessOwner, UserInformation
+from app.user.schemas import ProcessOwner
 
 
 #QUALITY PROCEDURE REQUEST
@@ -449,7 +449,6 @@ class DistributionListCreate(DistributionListBase):
 
 class DistributionList(DistributionListCreate):
     id: int
-    user: UserInformation
 
     class Config:
         orm_mode = True
