@@ -29,3 +29,20 @@ class QualityProcedureRequest(QualityProcedureRequestBase):
 
     class Config:
         orm_mode = True
+
+class QualityProcedureRequestHistoryBase(BaseModel):
+    remarks: str
+    date_created: datetime
+
+class QualityProcedureRequestHistoryCreate(QualityProcedureRequestHistoryBase):
+    user_id: int
+    status_id: int
+    status_actions_id: int
+
+class QualityProcedureRequestHistory(QualityProcedureRequestHistoryBase):
+    id: int
+    request_id: int
+
+    class Config:
+        orm_mode = True
+    

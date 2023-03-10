@@ -2,7 +2,7 @@ from app.quality_procedure.requests import models
 
 from sqlalchemy.orm import Session
 
-from app.quality_procedure.requests.schemas import QualityProcedureRequestCreate
+from app.quality_procedure.requests.schemas import QualityProcedureRequestCreate, QualityProcedureRequestHistory
 
 class QualityProcedureRequestManager(object): 
     @staticmethod
@@ -16,10 +16,17 @@ class QualityProcedureRequestManager(object):
         db.add(new_quality_procedure_request)
         db.commit()
         return new_quality_procedure_request
-    
-    
-        new_qp_request_history = models.QPRequestHistory(**qp_request_history.dict())
 
-        db.add(new_qp_request_history)
+class QualityProcedureRequestHistoryManager(object):
+    @staticmethod
+    def get_all_quality_procedure_request_history(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QualityProcedureRequestHistory).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_quality_procedure_request_history(db: Session, quality_procedure_request_history: QualityProcedureRequestHistory, request_id: int):
+        new_quality_procedure_request_history = models.QualityProcedureRequestHistory(**quality_procedure_request_history.dict(),request_id=request_id)
+
+        db.add(new_quality_procedure_request_history)
         db.commit()
-        return new_qp_request_history
+        db.refresh(new_quality_procedure_request_history)
+        return new_quality_procedure_request_history
