@@ -110,6 +110,23 @@ class ProcessOwner(BaseModel):
     class Config:
         orm_mode = True
 
+class PersonResponbsibleNameAndDesignation(BaseModel):
+    first_name: str
+    middle_initial: str
+    last_name: str
+    designation: int
+
+    class Config:
+        orm_mode = True
+
+class PersonResponsible(BaseModel):
+    id: int
+    role_id: int
+    user_basic_information: List[PersonResponbsibleNameAndDesignation] = []
+
+    class Config:
+        orm_mode = True
+
 
 
     

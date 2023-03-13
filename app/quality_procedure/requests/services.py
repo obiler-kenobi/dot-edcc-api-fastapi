@@ -23,8 +23,20 @@ class QualityProcedureRequestHistoryManager(object):
         return db.query(models.QualityProcedureRequestHistory).offset(skip).limit(limit).all()
     
     @staticmethod
+    def get_quality_procedure_request_history(db: Session, request_id: int):
+        return db.query(models.QualityProcedureRequestHistory).filter(models.QualityProcedureRequestHistory.request_id == request_id).all()
+    
+    @staticmethod
     def create_quality_procedure_request_history(db: Session, quality_procedure_request_history: QualityProcedureRequestHistory, request_id: int):
         new_quality_procedure_request_history = models.QualityProcedureRequestHistory(**quality_procedure_request_history.dict(),request_id=request_id)
+
+        db.add(new_quality_procedure_request_history)
+        db.commit()
+        db.refresh(new_quality_procedure_request_history)
+        return new_quality_procedure_request_history
+
+    @staticmethod
+    def create_bulk_quality_procedure_request_history(db: Session, quality_procedure_request_history: List[QualityProcedureRequestHistory], request_id: int):
 
         db.add(new_quality_procedure_request_history)
         db.commit()

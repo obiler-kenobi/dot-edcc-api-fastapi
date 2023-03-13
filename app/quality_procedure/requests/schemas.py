@@ -1,8 +1,8 @@
 from typing import List
-from datetime import datetime
+from datetime import date,datetime
 from pydantic import BaseModel
 
-from app.user.schemas import ProcessOwner
+from app.user.schemas import ProcessOwner, PersonResponsible
 from app.quality_procedure.status.schemas import StatusDescription, StatusAction
 
 class QualityProcedureRequestBase(BaseModel):  
@@ -32,7 +32,8 @@ class QualityProcedureRequest(QualityProcedureRequestBase):
 
 class QualityProcedureRequestHistoryBase(BaseModel):
     remarks: str
-    date_created: datetime
+    date_created: date
+    time_created: datetime
 
 class QualityProcedureRequestHistoryCreate(QualityProcedureRequestHistoryBase):
     user_id: int
@@ -42,6 +43,9 @@ class QualityProcedureRequestHistoryCreate(QualityProcedureRequestHistoryBase):
 class QualityProcedureRequestHistory(QualityProcedureRequestHistoryBase):
     id: int
     request_id: int
+    status: StatusDescription = []
+    status_actions: StatusAction = []
+    user: PersonResponsible = []
 
     class Config:
         orm_mode = True

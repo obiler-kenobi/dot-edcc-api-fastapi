@@ -37,9 +37,18 @@ def create_quality_procedure_document_request(quality_procedure_request: Quality
 def get_all_quality_procedure_request_history(db: Session = Depends(get_db)):
     return QualityProcedureRequestHistoryManager.get_all_quality_procedure_request_history(db)
 
+#GET QP REQUEST HISTORY
+@quality_procedure_requests_router.get(
+    "/requests/{request_id}/history",
+    response_model=List[QualityProcedureRequestHistory],
+    status_code=status.HTTP_200_OK
+)
+def get_quality_procedure_request_history(request_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureRequestHistoryManager.get_quality_procedure_request_history(db, request_id)
+
 @quality_procedure_requests_router.post(
     "/requests/{request_id}/history",
-    response_model=QualityProcedureRequestHistory,
+    response_model=List[QualityProcedureRequestHistory],
     status_code=status.HTTP_201_CREATED
 )
 def create_quality_procedure_request_history(request_id: int, quality_procedure_request_history: QualityProcedureRequestHistoryCreate, db: Session = Depends(get_db)):

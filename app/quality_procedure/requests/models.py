@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, Text, Column, ForeignKey, Integer, String, DateTime, Text
+from sqlalchemy import TIMESTAMP, Text, Column, ForeignKey, Integer, String, DATE, Text
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -34,7 +34,8 @@ class QualityProcedureRequestHistory(Base):
     status_id = Column(Integer, ForeignKey("status.id"))
     status_actions_id = Column(Integer, ForeignKey("status_actions.id"))
     remarks = Column(Text, nullable=True)
-    date_created = Column(TIMESTAMP, nullable=False)
+    date_created = Column(DATE, nullable=False)
+    time_created = Column(TIMESTAMP, nullable=False)
 
     quality_procedure_requests = relationship("QualityProcedureRequests", back_populates="quality_procedure_request_history")
     user = relationship("User", back_populates="quality_procedure_request_history")
