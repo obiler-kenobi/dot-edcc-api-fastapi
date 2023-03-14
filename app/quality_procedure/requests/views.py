@@ -3,7 +3,13 @@ from fastapi import APIRouter, Depends, status
 
 from sqlalchemy.orm import Session
 
-from app.quality_procedure.requests.schemas import QualityProcedureRequest, QualityProcedureRequestCreate, QualityProcedureRequestHistory, QualityProcedureRequestHistoryCreate
+from app.quality_procedure.requests.schemas import (
+    QualityProcedureRequest, 
+    QualityProcedureRequestCreate, 
+    QualityProcedureRequestHistory, 
+    QualityProcedureRequestHistoryCreate,
+    QualityProcedureStatusUpdate)
+
 from app.quality_procedure.requests.services import QualityProcedureRequestManager, QualityProcedureRequestHistoryManager
 
 from app.deps import get_db
@@ -27,6 +33,15 @@ def get_all_active_quality_procedure_document_requests(db: Session = Depends(get
 )
 def create_quality_procedure_document_request(quality_procedure_request: QualityProcedureRequestCreate, db: Session = Depends(get_db)):
     return QualityProcedureRequestManager.create_quality_procedure_request(db, quality_procedure_request)
+
+#UPDATE QP REQUEST
+@quality_procedure_requests_router.patch(
+    "/requests/{request_id}",
+    response_model=QualityProcedureRequest,
+    status_code=status.HTTP_201_CREATED
+)
+def update_quality_procedure_request_status(request_id: int, quality_procedure_request_update: QualityProcedureStatusUpdate, db: Session = Depends(get_db)):
+    return QualityProcedureRequestManager.update_quality_procedure_request_status(db, request_id, quality_procedure_request_update)
 
 #GET ALL QP REQUEST HISTORY
 @quality_procedure_requests_router.get(

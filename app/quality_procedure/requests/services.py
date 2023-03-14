@@ -4,7 +4,7 @@ from app.quality_procedure.requests import models
 
 from sqlalchemy.orm import Session
 
-from app.quality_procedure.requests.schemas import QualityProcedureRequestCreate, QualityProcedureRequestHistory
+from app.quality_procedure.requests.schemas import QualityProcedureRequestCreate, QualityProcedureRequestHistory, QualityProcedureStatusUpdate
 
 class QualityProcedureRequestManager(object): 
     @staticmethod
@@ -18,6 +18,16 @@ class QualityProcedureRequestManager(object):
         db.add(new_quality_procedure_request)
         db.commit()
         return new_quality_procedure_request
+    
+    @staticmethod
+    def update_quality_procedure_request_status(db: Session, request_id: int, quality_procedure_request_update: QualityProcedureStatusUpdate):
+        stored_item_data = db.query(models.QualityProcedureRequests).filter(models.QualityProcedureRequests.id == request_id).first()
+        update_data = quality_procedure_request_update.dict(exclude_unset=True)
+        db.query(models.QualityProcedureRequests).filter(models.QualityProcedureRequests.id == request_id).update(update_data, synchronize_session=False)
+        
+        db.commit()
+        db.refresh(stored_item_data)
+        return stored_item_data
 
 class QualityProcedureRequestHistoryManager(object):
     @staticmethod
