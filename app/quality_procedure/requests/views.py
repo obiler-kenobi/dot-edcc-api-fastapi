@@ -46,9 +46,10 @@ def get_all_quality_procedure_request_history(db: Session = Depends(get_db)):
 def get_quality_procedure_request_history(request_id: int, db: Session = Depends(get_db)):
     return QualityProcedureRequestHistoryManager.get_quality_procedure_request_history(db, request_id)
 
+#CREATE QP REQUEST HISTORY
 @quality_procedure_requests_router.post(
     "/requests/{request_id}/history",
-    response_model=List[QualityProcedureRequestHistory],
+    response_model=QualityProcedureRequestHistory,
     status_code=status.HTTP_201_CREATED
 )
 def create_quality_procedure_request_history(request_id: int, quality_procedure_request_history: QualityProcedureRequestHistoryCreate, db: Session = Depends(get_db)):

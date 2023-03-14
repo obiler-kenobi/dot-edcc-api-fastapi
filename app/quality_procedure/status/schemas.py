@@ -37,6 +37,7 @@ class StatusActions(StatusActionsBase):
 
 class StatusAction(BaseModel):
     action: str
+    action_color: str
 
     class Config:
         orm_mode = True

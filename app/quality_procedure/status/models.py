@@ -24,6 +24,7 @@ class StatusActions(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     action = Column(String(100), nullable=False)
     action_description = Column(String(150), nullable=False)
+    action_color = Column(String(50), nullable=False)
     created_by = Column(String(100), nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
     date_updated = Column(TIMESTAMP, nullable=True)
