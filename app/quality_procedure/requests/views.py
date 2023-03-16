@@ -38,7 +38,7 @@ def create_quality_procedure_document_request(quality_procedure_request: Quality
 @quality_procedure_requests_router.patch(
     "/requests/{request_id}",
     response_model=QualityProcedureRequest,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_200_OK
 )
 def update_quality_procedure_request_status(request_id: int, quality_procedure_request_update: QualityProcedureStatusUpdate, db: Session = Depends(get_db)):
     return QualityProcedureRequestManager.update_quality_procedure_request_status(db, request_id, quality_procedure_request_update)

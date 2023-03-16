@@ -17,6 +17,7 @@ class Status(StatusBase):
         orm_mode = True
 
 class StatusDescription(BaseModel):
+    id: int
     status_description: str
 
     class Config:
@@ -36,6 +37,7 @@ class StatusActions(StatusActionsBase):
         orm_mode = True
 
 class StatusAction(BaseModel):
+    id: int
     action: str
     action_color: str
 

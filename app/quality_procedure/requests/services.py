@@ -9,7 +9,7 @@ from app.quality_procedure.requests.schemas import QualityProcedureRequestCreate
 class QualityProcedureRequestManager(object): 
     @staticmethod
     def get_all_quality_procedure_requests(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QualityProcedureRequests).offset(skip).limit(limit).all()
+        return db.query(models.QualityProcedureRequests).order_by(models.QualityProcedureRequests.date_created.asc()).offset(skip).limit(limit).all()
     
     @staticmethod
     def create_quality_procedure_request(db: Session, quality_procedure_request: QualityProcedureRequestCreate):
