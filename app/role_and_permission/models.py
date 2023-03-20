@@ -9,12 +9,27 @@ class Role(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     role = Column(String(70), nullable=False)
     role_description = Column(String(200), nullable=False)
+    role_group_id = Column(Integer, ForeignKey("role_group.id"))
     tag = Column(String(80), nullable=False)
     slug = Column(String(80), nullable=False)
     fixed = Column(Boolean, nullable=False)
-    encoded_date = Column(TIMESTAMP, nullable=False)
-    encoded_by = Column(String(40), nullable=False)
-    
+    date_created = Column(TIMESTAMP, nullable=False)
+    created_by = Column(String(40), nullable=False)
+
+    role_group = relationship("RoleGroup", back_populates="role")
+
+class RoleGroup(Base):
+    __tablename__ = "role_group"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    group_title = Column(String(70), nullable=False)
+    group_description = Column(String(200), nullable=False)
+    slug = Column(String(80), nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+    created_by = Column(String(40), nullable=False)
+
+    role = relationship("Role", back_populates="role_group")
+
 class Permission(Base):
     __tablename__ = "permission"
 

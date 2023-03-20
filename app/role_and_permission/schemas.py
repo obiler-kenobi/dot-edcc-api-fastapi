@@ -7,13 +7,29 @@ class RoleBase(BaseModel):
     tag: str
     slug: str
     fixed: bool
-    encoded_date: datetime
-    encoded_by: str
+    date_created: datetime
+    created_by: str
 
 class RoleCreate(RoleBase):
     pass
 
 class Role(RoleBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class RoleGroupBase(BaseModel):
+    group_title: str
+    group_description: str
+    slug: str
+    date_created: datetime
+    created_by: str
+
+class RoleGroupCreate(RoleGroupBase):
+    pass
+
+class RoleGroup(RoleGroupBase):
     id: int
 
     class Config:

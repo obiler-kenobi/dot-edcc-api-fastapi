@@ -1,5 +1,5 @@
 from app.role_and_permission import models
-from app.role_and_permission.schemas import RoleCreate, PermissionCreate, UserAccessCreate, UserCustomAccessCreate
+from app.role_and_permission.schemas import RoleCreate, PermissionCreate, UserAccessCreate, UserCustomAccessCreate, RoleGroupCreate
 
 from sqlalchemy.orm import Session
 
@@ -15,6 +15,18 @@ class RoleManager(object):
         db.add(new_role)
         db.commit()
         return new_role
+    
+    @staticmethod
+    def get_all_role_groups(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.RoleGroup).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_role_group(db: Session, role_group: RoleGroupCreate):
+        new_role_group = models.RoleGroup(**role_group.dict())
+
+        db.add(new_role_group)
+        db.commit()
+        return new_role_group
     
 class PermissionManager(object):
     @staticmethod
