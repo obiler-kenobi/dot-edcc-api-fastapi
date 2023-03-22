@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 
 from sqlalchemy.orm import Session
 
-from app.role_and_permission.schemas import Role, RoleCreate, Permission, PermissionCreate, UserAccess, UserAccessCreate, UserCustomAccess, UserCustomAccessCreate
+from app.role_and_permission.schemas import Role, RoleCreate, RoleGroup, RoleGroupCreate, Permission, PermissionCreate, UserAccess, UserAccessCreate, UserCustomAccess, UserCustomAccessCreate
 from app.role_and_permission.services import RoleManager, PermissionManager, AccessManager
 
 from app.deps import get_db
@@ -27,6 +27,24 @@ def get_all_roles(db: Session = Depends(get_db)):
 )
 def  create_role(role: RoleCreate, db: Session = Depends(get_db)):
     return RoleManager.create_role(db, role)
+
+#GET ALL ROLE GROUP 
+@role_and_permission_router.get(
+    "/role-groups",
+    response_model=List[RoleGroup],
+    status_code=status.HTTP_200_OK
+)
+def get_all_role_groups(db: Session = Depends(get_db)):
+    return RoleManager.get_all_role_groups(db)
+
+#CREATE ROLE GROUP
+@role_and_permission_router.post(
+    "/role-groups",
+    response_model=RoleGroup,
+    status_code=status.HTTP_201_CREATED
+)
+def create_role_group(role_group: RoleGroupCreate, db: Session = Depends(get_db)):
+    return RoleManager.create_role_group(db, role_group)
 
 #GET ALL PERMISSIONS
 @role_and_permission_router.get(
