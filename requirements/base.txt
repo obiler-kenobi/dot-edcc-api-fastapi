@@ -1,4 +1,5 @@
 fastapi
+fastapi-jwt-auth
 uvicorn
 sqlalchemy
 python-multipart
