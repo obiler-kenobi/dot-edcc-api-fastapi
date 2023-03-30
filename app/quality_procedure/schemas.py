@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -100,7 +100,7 @@ class QPTitlePage(QPTitlePageBase):
 
 #OBJECTIVE
 class QPObjectiveBase(BaseModel):
-    objective: str
+    objective: Dict[str, str] = None
     date_created: datetime
 
 class QPObjectiveCreate(QPObjectiveBase):

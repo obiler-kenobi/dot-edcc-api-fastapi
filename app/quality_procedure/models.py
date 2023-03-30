@@ -1,4 +1,5 @@
 from sqlalchemy import TIMESTAMP, Boolean, Column, ForeignKey, Integer, String, DateTime, Text
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -187,7 +188,7 @@ class QPObjective(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
-    objective = Column(Text, nullable=False)
+    objective = Column(JSONB, nullable=False)
     date_created = Column(TIMESTAMP, nullable=False)
 
     drrrf = relationship("DRRRF", back_populates="qp_objective")

@@ -10,6 +10,7 @@ from app.quality_procedure.views import quality_procedure_router
 from app.qms_team.views import qms_team_router
 from app.quality_procedure.status.views import status_router
 from app.quality_procedure.requests.views import quality_procedure_requests_router
+from app.model_test.views import sample_router
 
 api_router = APIRouter(default_response_class=ORJSONResponse)
 
@@ -73,5 +74,12 @@ api_router.include_router(
     quality_procedure_requests_router,
     prefix="/quality-procedures",
     tags=["requests"],
+    responses={401: {"model": ErrorModel}, 403: {"model": ErrorModel}}
+)
+
+api_router.include_router(
+    sample_router,
+    prefix="/sample-models",
+    tags=["sample-models"],
     responses={401: {"model": ErrorModel}, 403: {"model": ErrorModel}}
 )
