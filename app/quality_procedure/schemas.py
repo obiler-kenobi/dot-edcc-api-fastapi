@@ -100,7 +100,7 @@ class QPTitlePage(QPTitlePageBase):
 
 #OBJECTIVE
 class QPObjectiveBase(BaseModel):
-    objective: Dict[str, str] = None
+    objective: Dict[str, dict | str | list]
     date_created: datetime
 
 class QPObjectiveCreate(QPObjectiveBase):
