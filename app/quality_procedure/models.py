@@ -193,28 +193,6 @@ class QPObjective(Base):
 
     drrrf = relationship("DRRRF", back_populates="qp_objective")
 
-class QPScope(Base):
-    __tablename__ = "qp_scope"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
-    scope = Column(Text, nullable=False)
-    date_created = Column(TIMESTAMP, nullable=False)
-
-    drrrf = relationship("DRRRF", back_populates="qp_scope")
-
-class QPDefinitionOfTerm(Base):
-    __tablename__ = "qp_definition_of_term"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
-    term = Column(String(80), nullable=False)
-    definition = Column(Text, nullable=False)
-    #slug
-    date_created = Column(TIMESTAMP, nullable=False)
-
-    drrrf = relationship("DRRRF", back_populates="qp_definition_of_term")
-
 class QPReferenceDocument(Base):
     __tablename__ = "qp_reference_document"
 

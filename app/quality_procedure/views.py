@@ -11,7 +11,7 @@ from app.quality_procedure.schemas import (
     QPRequestHistoryCreate) #QP REQUESTS
 from app.quality_procedure.schemas import DRRRF, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnit, InterfacingUnitCreate, IUReviewSummary, IUReviewSummaryCreate
 from app.quality_procedure.services import QualityProcedureDocumentRequestManager, DRRRFManager
-from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPScope, QPScopeCreate, QPDefinitionOfTerm, QPDefinitionOfTermCreate, QPReferenceDocument, QPReferenceDocumentCreate, QPResponsiblityAndAuthority, QPResponsiblityAndAuthorityCreate, QPProcedure, QPProcedureCreate, QPProcess, QPProcessCreate, QPProcessInCharge, QPProcessInChargeCreate, QPProcessNote, QPProcessNoteCreate, QPProcessRecord, QPProcessRecordCreate, QPReport, QPReportCreate, QPPerformanceIndicator, QPPerformanceIndicatorCreate, QPAttachmentAndForm, QPAttachmentAndFormCreate, Status, StatusCreate
+from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPReferenceDocument, QPReferenceDocumentCreate, QPResponsiblityAndAuthority, QPResponsiblityAndAuthorityCreate, QPProcedure, QPProcedureCreate, QPProcess, QPProcessCreate, QPProcessInCharge, QPProcessInChargeCreate, QPProcessNote, QPProcessNoteCreate, QPProcessRecord, QPProcessRecordCreate, QPReport, QPReportCreate, QPPerformanceIndicator, QPPerformanceIndicatorCreate, QPAttachmentAndForm, QPAttachmentAndFormCreate, Status, StatusCreate
 from app.quality_procedure.services import QualityProcedureManager, StatusManager
 from app.quality_procedure.schemas import DistributionList, DistributionListCreate
 from app.quality_procedure.services import DistributionListManager
@@ -227,51 +227,6 @@ def get_all_objectives(db: Session = Depends(get_db)):
 )
 def create_objective(drrrf_id: int, objective: QPObjectiveCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_objective(db, objective, drrrf_id)
-
-#GET ALL SCOPE
-@quality_procedure_router.get(
-    "/quality-procedures/scopes",
-    response_model=List[QPScope],
-    status_code=status.HTTP_200_OK
-)
-def get_all_scopes(db: Session = Depends(get_db)):
-    return QualityProcedureManager.get_all_scopes(db)
-
-#CREATE SCOPE
-@quality_procedure_router.post(
-    "/quality-procedures/{drrrf_id}/scopes",
-    response_model=QPScope,
-    status_code=status.HTTP_201_CREATED
-)
-def create_scope(drrrf_id: int, scope: QPScopeCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_scope(db, scope, drrrf_id)
-
-#GET ALL DEFINITION OF TERM
-@quality_procedure_router.get(
-    "/quality-procedures/definition-of-terms",
-    response_model=List[QPDefinitionOfTerm],
-    status_code=status.HTTP_200_OK
-)
-def get_all_definition_of_terms(db: Session = Depends(get_db)):
-    return QualityProcedureManager.get_all_definition_of_term(db)
-
-#CREATE DEFINITION OF TERM
-@quality_procedure_router.post(
-    "/quality-procedures/definition-of-terms",
-    response_model=QPDefinitionOfTerm,
-    status_code=status.HTTP_201_CREATED
-)
-def create_definition_of_term(definition_of_term: QPDefinitionOfTermCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_definition_of_term(db, definition_of_term)
-
-#CREATE DEFINITION OF TERM
-@quality_procedure_router.post(
-    "/quality-procedures/{drrrf_id}/definition-of-terms",
-    response_model=QPDefinitionOfTerm,
-    status_code=status.HTTP_201_CREATED
-)
-def create_definition_of_term(drrrf_id: int, definition_of_term: QPDefinitionOfTermCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_definition_of_term(db, definition_of_term, drrrf_id)
 
 #GET ALL REFERENCE DOCUMENT
 @quality_procedure_router.get(

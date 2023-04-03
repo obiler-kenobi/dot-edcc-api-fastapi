@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from app.user.schemas import ProcessOwner
-
+from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm
 
 #QUALITY PROCEDURE REQUEST
 class QPRequestHistoryBase(BaseModel):
@@ -107,37 +107,6 @@ class QPObjectiveCreate(QPObjectiveBase):
     pass
 
 class QPObjective(QPObjectiveBase):
-    id: int
-    drrrf_id: int
-
-    class Config:
-        orm_mode = True
-
-#SCOPE
-class QPScopeBase(BaseModel):
-    scope: str
-    date_created: datetime
-
-class QPScopeCreate(QPScopeBase):
-    pass
-
-class QPScope(QPScopeBase):
-    id: int
-    drrrf_id: int
-
-    class Config:
-        orm_mode = True
-
-#DEFINITION OF TERMS
-class QPDefinitionOfTermBase(BaseModel):
-    term: str
-    definition: str
-    date_created: datetime
-
-class QPDefinitionOfTermCreate(QPDefinitionOfTermBase):
-    pass
-
-class QPDefinitionOfTerm(QPDefinitionOfTermBase):
     id: int
     drrrf_id: int
 
