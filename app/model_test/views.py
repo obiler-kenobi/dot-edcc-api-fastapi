@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from app.model_test.schemas import Sample, SampleCreate
 from app.model_test.services import SampleManager
 
+from fastapi import UploadFile, Form
+
 from app.deps import get_db
 
 sample_router = APIRouter()
@@ -36,3 +38,11 @@ def get_sample(id: int, db: Session = Depends(get_db)):
 )
 def create_sample(sample: SampleCreate, db: Session = Depends(get_db)):
     return SampleManager.create_sample(db, sample)
+
+#UPLOAD FILE
+@sample_router.post(
+    "/uploadfile",
+    status_code=status.HTTP_200_OK
+    )
+def upload_file(uploaded: UploadFile):
+    return SampleManager.upload_file(uploaded)

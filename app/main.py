@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from fastapi_jwt_auth.exceptions import AuthJWTException
 from fastapi_jwt_auth import AuthJWT
@@ -20,7 +21,6 @@ from app.quality_procedure.content import models as quality_procedure_content_mo
 from app.qms_team import models as qms_team_models
 from app.model_test import models as model_test_models
 
-
 app = FastAPI()
 
 offices_models.Base.metadata.create_all(bind=engine)
@@ -33,8 +33,6 @@ qms_team_models.Base.metadata.create_all(bind=engine)
 model_test_models.Base.metadata.create_all(bind=engine)
 quality_procedure_content_models.Base.metadata.create_all(bind=engine)
 
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -44,6 +42,8 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
+
+app.mount("/uploads", StaticFiles(directory="app/uploads"), name="uploads")
 
 app.exception_handler(AuthJWTException)
 def authjwt_exception_handler(request: Request, exc: AuthJWTException):
