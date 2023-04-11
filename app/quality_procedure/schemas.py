@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from app.user.schemas import ProcessOwner
-from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm
+from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm, QPReferenceDocument, QPResponsiblityAndAuthority
 
 #QUALITY PROCEDURE REQUEST
 class QPRequestHistoryBase(BaseModel):
@@ -107,38 +107,6 @@ class QPObjectiveCreate(QPObjectiveBase):
     pass
 
 class QPObjective(QPObjectiveBase):
-    id: int
-    drrrf_id: int
-
-    class Config:
-        orm_mode = True
-
-#REFERENCE DOCUMENTS
-class QPReferenceDocumentBase(BaseModel):
-    reference_document: str
-    file_path: str
-    date_created: datetime
-
-class QPReferenceDocumentCreate(QPReferenceDocumentBase):
-    pass
-
-class QPReferenceDocument(QPReferenceDocumentBase):
-    id: int
-    drrrf_id: int
-
-    class Config:
-        orm_mode = True
-
-#RESPONSIBILITY AND AUTHORITY
-class QPResponsiblityAndAuthorityBase(BaseModel):
-    authority: str
-    responsibility: str
-    date_created: datetime
-
-class QPResponsiblityAndAuthorityCreate(QPResponsiblityAndAuthorityBase):
-    pass
-
-class QPResponsiblityAndAuthority(QPResponsiblityAndAuthorityBase):
     id: int
     drrrf_id: int
 

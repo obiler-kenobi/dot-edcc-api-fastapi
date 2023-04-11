@@ -193,30 +193,6 @@ class QPObjective(Base):
 
     drrrf = relationship("DRRRF", back_populates="qp_objective")
 
-class QPReferenceDocument(Base):
-    __tablename__ = "qp_reference_document"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
-    reference_document = Column(Text, nullable=False)
-    file_path = Column(String(150), nullable=True)
-    date_created = Column(TIMESTAMP, nullable=False)
-
-    drrrf = relationship("DRRRF", back_populates="qp_reference_document")
-
-class QPResponsbilityAndAuthority(Base):
-    __tablename__ = "qp_responsibility_and_authority"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
-    authority = Column(String, nullable=False)
-    responsibility = Column(Text, nullable=False)
-    #slug
-    date_created = Column(TIMESTAMP, nullable=False)
-
-    drrrf = relationship("DRRRF", back_populates="qp_responsibility_and_authority")
-    qp_process_in_charge = relationship("QPProcessInCharge", back_populates="qp_responsibility_and_authority")
-
 class QPProcedure(Base):
     __tablename__ = "qp_procedure"
 

@@ -24,3 +24,26 @@ class QPDefinitionOfTerm(Base):
     date_created = Column(TIMESTAMP, nullable=False)
 
     drrrf = relationship("DRRRF", back_populates="qp_definition_of_term")
+
+class QPReferenceDocument(Base):
+    __tablename__ = "qp_reference_document"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
+    reference_document = Column(Text, nullable=False)
+    file_path = Column(String(250), nullable=True)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_reference_document")
+
+class QPResponsbilityAndAuthority(Base):
+    __tablename__ = "qp_responsibility_and_authority"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
+    authority = Column(String, nullable=False)
+    responsibility = Column(JSONB, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_responsibility_and_authority")
+    qp_process_in_charge = relationship("QPProcessInCharge", back_populates="qp_responsibility_and_authority")

@@ -11,7 +11,7 @@ from app.quality_procedure.schemas import (
     QPRequestHistoryCreate) #QP REQUESTS
 from app.quality_procedure.schemas import DRRRF, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnit, InterfacingUnitCreate, IUReviewSummary, IUReviewSummaryCreate
 from app.quality_procedure.services import QualityProcedureDocumentRequestManager, DRRRFManager
-from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPReferenceDocument, QPReferenceDocumentCreate, QPResponsiblityAndAuthority, QPResponsiblityAndAuthorityCreate, QPProcedure, QPProcedureCreate, QPProcess, QPProcessCreate, QPProcessInCharge, QPProcessInChargeCreate, QPProcessNote, QPProcessNoteCreate, QPProcessRecord, QPProcessRecordCreate, QPReport, QPReportCreate, QPPerformanceIndicator, QPPerformanceIndicatorCreate, QPAttachmentAndForm, QPAttachmentAndFormCreate, Status, StatusCreate
+from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPProcedure, QPProcedureCreate, QPProcess, QPProcessCreate, QPProcessInCharge, QPProcessInChargeCreate, QPProcessNote, QPProcessNoteCreate, QPProcessRecord, QPProcessRecordCreate, QPReport, QPReportCreate, QPPerformanceIndicator, QPPerformanceIndicatorCreate, QPAttachmentAndForm, QPAttachmentAndFormCreate, Status, StatusCreate
 from app.quality_procedure.services import QualityProcedureManager, StatusManager
 from app.quality_procedure.schemas import DistributionList, DistributionListCreate
 from app.quality_procedure.services import DistributionListManager
@@ -227,51 +227,6 @@ def get_all_objectives(db: Session = Depends(get_db)):
 )
 def create_objective(drrrf_id: int, objective: QPObjectiveCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_objective(db, objective, drrrf_id)
-
-#GET ALL REFERENCE DOCUMENT
-@quality_procedure_router.get(
-    "/quality-procedures/reference-documents",
-    response_model=List[QPReferenceDocument],
-    status_code=status.HTTP_200_OK
-)
-def get_all_reference_document(db: Session = Depends(get_db)):
-    return QualityProcedureManager.get_all_reference_document(db)
-
-#CREATE REFERENCE DOCUMENT
-@quality_procedure_router.post(
-    "/quality-procedures/{drrrf_id}/reference-documents",
-    response_model=QPReferenceDocument,
-    status_code=status.HTTP_201_CREATED
-)
-def create_definition_of_term(drrrf_id: int, reference_document: QPReferenceDocumentCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_reference_document(db, reference_document, drrrf_id)
-
-#GET ALL RESPONSIBLITY AND AUTHORITY
-@quality_procedure_router.get(
-    "/quality-procedures/responsiblities-and-authorities",
-    response_model=List[QPResponsiblityAndAuthority],
-    status_code=status.HTTP_200_OK
-)
-def get_all_responsibility_and_authority(db: Session = Depends(get_db)):
-    return QualityProcedureManager.get_all_responsibility_and_authority(db)
-
-#GET ALL RESPONSIBLITY AND AUTHORITY
-@quality_procedure_router.get(
-    "/quality-procedures/{drrrf_id}/responsiblities-and-authorities",
-    response_model=List[QPResponsiblityAndAuthority],
-    status_code=status.HTTP_200_OK
-)
-def get_all_drrrf_responsibility_and_authority(drrrf_id: int, db: Session = Depends(get_db)):
-    return QualityProcedureManager.get_all_drrrf_responsibility_and_authority(db, drrrf_id)
-
-#CREATE RESPONSIBILITIES AND AUTHORITIES
-@quality_procedure_router.post(
-    "/quality-procedures/{drrrf_id}/responsibilities-and-authorities",
-    response_model=QPResponsiblityAndAuthority,
-    status_code=status.HTTP_201_CREATED
-)
-def create_responsibility_and_authority(drrrf_id: int, responsibility_and_authority: QPResponsiblityAndAuthorityCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_responsibility_and_authority(db, responsibility_and_authority, drrrf_id)
 
 #GET ALL PROCEDURE
 @quality_procedure_router.get(

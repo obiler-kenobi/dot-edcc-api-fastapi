@@ -3,7 +3,7 @@ from app.quality_procedure import models
 from sqlalchemy.orm import Session
 
 from app.quality_procedure.schemas import QualityProcedureDocumentRequestStatusUpdate, QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnitCreate, IUReviewSummaryCreate
-from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPReferenceDocumentCreate, QPResponsiblityAndAuthorityCreate, QPProcedureCreate, QPProcessCreate, QPProcessInChargeCreate, QPProcessNoteCreate, QPProcessRecordCreate, QPReportCreate, QPPerformanceIndicatorCreate, QPAttachmentAndFormCreate
+from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPProcedureCreate, QPProcessCreate, QPProcessInChargeCreate, QPProcessNoteCreate, QPProcessRecordCreate, QPReportCreate, QPPerformanceIndicatorCreate, QPAttachmentAndFormCreate
 from app.quality_procedure.schemas import StatusCreate
 from app.quality_procedure.schemas import DistributionListCreate
 
@@ -152,38 +152,6 @@ class QualityProcedureManager(object):
         db.refresh(new_objective)
         return new_objective
 
-
-    
-    @staticmethod
-    def get_all_reference_document(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QPReferenceDocument).offset(skip).limit(limit).all()
-    
-    @staticmethod
-    def create_reference_document(db: Session, reference_document: QPReferenceDocumentCreate, drrrf_id: int):
-        new_reference_document = models.QPReferenceDocument(**reference_document.dict(),drrrf_id=drrrf_id)
-
-        db.add(new_reference_document)
-        db.commit()
-        db.refresh(new_reference_document)
-        return new_reference_document
-
-    @staticmethod
-    def get_all_responsibility_and_authority(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QPResponsbilityAndAuthority).offset(skip).limit(limit).all()
-    
-    @staticmethod
-    def get_all_drrrf_responsibility_and_authority(db: Session, drrrf_id: int):
-        return db.query(models.QPResponsbilityAndAuthority).filter(models.QPResponsbilityAndAuthority.drrrf_id == drrrf_id).all()
-    
-    @staticmethod
-    def create_responsibility_and_authority(db: Session, responsibility_and_authority: QPResponsiblityAndAuthorityCreate, drrrf_id: int):
-        new_responsibility_and_authority = models.QPResponsbilityAndAuthority(**responsibility_and_authority.dict(), drrrf_id=drrrf_id)
-
-        db.add(new_responsibility_and_authority)
-        db.commit()
-        db.refresh(new_responsibility_and_authority)
-        return new_responsibility_and_authority
-    
     @staticmethod
     def get_all_procedure(db: Session, skip: int = 0, limit: int = 100):
         return db.query(models.QPProcedure).offset(skip).limit(limit).all()

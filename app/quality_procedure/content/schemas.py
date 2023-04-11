@@ -32,3 +32,35 @@ class QPDefinitionOfTerm(QPDefinitionOfTermBase):
 
     class Config:
         orm_mode = True
+
+#REFERENCE DOCUMENTS
+class QPReferenceDocumentBase(BaseModel):
+    reference_document: str
+    file_path: str
+    date_created: datetime
+
+class QPReferenceDocumentCreate(QPReferenceDocumentBase):
+    pass
+
+class QPReferenceDocument(QPReferenceDocumentBase):
+    id: int
+    drrrf_id: int
+
+    class Config:
+        orm_mode = True
+
+#RESPONSIBILITY AND AUTHORITY
+class QPResponsiblityAndAuthorityBase(BaseModel):
+    authority: str
+    responsibility: Dict[str, dict | str | list]
+    date_created: datetime
+
+class QPResponsiblityAndAuthorityCreate(QPResponsiblityAndAuthorityBase):
+    pass
+
+class QPResponsiblityAndAuthority(QPResponsiblityAndAuthorityBase):
+    id: int
+    drrrf_id: int
+
+    class Config:
+        orm_mode = True

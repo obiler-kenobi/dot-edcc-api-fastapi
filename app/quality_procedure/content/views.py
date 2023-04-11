@@ -7,7 +7,11 @@ from app.quality_procedure.content.schemas import (
     QPScope, 
     QPScopeCreate,
     QPDefinitionOfTerm,
-    QPDefinitionOfTermCreate)
+    QPDefinitionOfTermCreate,
+    QPReferenceDocument,
+    QPReferenceDocumentCreate,
+    QPResponsiblityAndAuthority,
+    QPResponsiblityAndAuthorityCreate)
 from app.quality_procedure.content.services import QualityProcedureManager
 from app.deps import get_db
 
@@ -48,3 +52,48 @@ def get_all_definition_of_terms(db: Session = Depends(get_db)):
 )
 def create_definition_of_term(drrrf_id: int, definition_of_term: QPDefinitionOfTermCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_definition_of_term(db, definition_of_term, drrrf_id)
+
+#GET ALL REFERENCE DOCUMENT
+@quality_procedure_content_router.get(
+    "/reference-documents",
+    response_model=List[QPReferenceDocument],
+    status_code=status.HTTP_200_OK
+)
+def get_all_reference_document(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_reference_document(db)
+
+#CREATE REFERENCE DOCUMENT
+@quality_procedure_content_router.post(
+    "/{drrrf_id}/reference-documents",
+    response_model=QPReferenceDocument,
+    status_code=status.HTTP_201_CREATED
+)
+def create_definition_of_term(drrrf_id: int, reference_document: QPReferenceDocumentCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_reference_document(db, reference_document, drrrf_id)
+
+#GET ALL RESPONSIBLITY AND AUTHORITY
+@quality_procedure_content_router.get(
+    "/responsiblities-and-authorities",
+    response_model=List[QPResponsiblityAndAuthority],
+    status_code=status.HTTP_200_OK
+)
+def get_all_responsibility_and_authority(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_responsibility_and_authority(db)
+
+#GET ALL RESPONSIBLITY AND AUTHORITY
+@quality_procedure_content_router.get(
+    "/{drrrf_id}/responsiblities-and-authorities",
+    response_model=List[QPResponsiblityAndAuthority],
+    status_code=status.HTTP_200_OK
+)
+def get_all_drrrf_responsibility_and_authority(drrrf_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_drrrf_responsibility_and_authority(db, drrrf_id)
+
+#CREATE RESPONSIBILITIES AND AUTHORITIES
+@quality_procedure_content_router.post(
+    "/{drrrf_id}/responsibilities-and-authorities",
+    response_model=QPResponsiblityAndAuthority,
+    status_code=status.HTTP_201_CREATED
+)
+def create_responsibility_and_authority(drrrf_id: int, responsibility_and_authority: QPResponsiblityAndAuthorityCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_responsibility_and_authority(db, responsibility_and_authority, drrrf_id)
