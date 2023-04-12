@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -61,6 +61,41 @@ class QPResponsiblityAndAuthorityCreate(QPResponsiblityAndAuthorityBase):
 class QPResponsiblityAndAuthority(QPResponsiblityAndAuthorityBase):
     id: int
     drrrf_id: int
+
+    class Config:
+        orm_mode = True
+
+#PROCESS
+class QPProcessBase(BaseModel):
+    process_title: str
+    process_description: Dict[str, dict | str | list]
+    date_created: datetime
+
+class QPProcessCreate(QPProcessBase):
+    pass
+
+class QPProcess(QPProcessBase):
+    id: int
+    drrrf_id: int
+    procedure_id: int
+    #qp_process_in_charge: List[QPProcessInCharge] = []
+    #qp_process_record: List[QPProcessRecord] = []
+
+    class Config:
+        orm_mode = True
+
+#PROCEDURE
+class QPProcedureBase(BaseModel):
+    procedure: str
+    date_created: datetime
+
+class QPProcedureCreate(QPProcedureBase):
+    pass
+
+class QPProcedure(QPProcedureBase):
+    id: int
+    drrrf_id: int
+    qp_process: List[QPProcess]
 
     class Config:
         orm_mode = True

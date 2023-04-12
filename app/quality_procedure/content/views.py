@@ -11,7 +11,11 @@ from app.quality_procedure.content.schemas import (
     QPReferenceDocument,
     QPReferenceDocumentCreate,
     QPResponsiblityAndAuthority,
-    QPResponsiblityAndAuthorityCreate)
+    QPResponsiblityAndAuthorityCreate,
+    QPProcedure,
+    QPProcedureCreate,
+    QPProcess,
+    QPProcessCreate)
 from app.quality_procedure.content.services import QualityProcedureManager
 from app.deps import get_db
 
@@ -97,3 +101,48 @@ def get_all_drrrf_responsibility_and_authority(drrrf_id: int, db: Session = Depe
 )
 def create_responsibility_and_authority(drrrf_id: int, responsibility_and_authority: QPResponsiblityAndAuthorityCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_responsibility_and_authority(db, responsibility_and_authority, drrrf_id)
+
+#GET ALL PROCEDURE
+@quality_procedure_content_router.get(
+    "/procedures",
+    response_model=List[QPProcedure],
+    status_code=status.HTTP_200_OK
+)
+def get_all_procedure(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_procedure(db)
+
+#CREATE PROCEDURE
+@quality_procedure_content_router.get(
+    "/{drrrf_id}/procedures",
+    response_model=List[QPProcedure],
+    status_code=status.HTTP_200_OK
+)
+def get_drrrf_procedures(drrrf_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_drrrf_procedures(db, drrrf_id)
+
+#CREATE PROCEDURE
+@quality_procedure_content_router.post(
+    "/{drrrf_id}/procedures",
+    response_model=QPProcedure,
+    status_code=status.HTTP_201_CREATED
+)
+def create_procedure(drrrf_id: int, procedure: QPProcedureCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_procedure(db, procedure, drrrf_id)
+
+#GET ALL PROCESS
+@quality_procedure_content_router.get(
+    "/processes",
+    response_model=List[QPProcess],
+    status_code=status.HTTP_200_OK
+)
+def get_all_process(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_process(db)
+
+#CREATE PROCESS
+@quality_procedure_content_router.post(
+    "/{drrrf_id}/procedures/{procedure_id}/processes",
+    response_model=QPProcess,
+    status_code=status.HTTP_201_CREATED
+)
+def create_procedure(drrrf_id: int, procedure_id: int, process: QPProcessCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_process(db, process, drrrf_id, procedure_id)

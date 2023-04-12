@@ -2,7 +2,13 @@ from app.quality_procedure.content import models
 
 from sqlalchemy.orm import Session
 
-from app.quality_procedure.content.schemas import QPScopeCreate, QPDefinitionOfTermCreate, QPReferenceDocumentCreate, QPResponsiblityAndAuthorityCreate
+from app.quality_procedure.content.schemas import (
+    QPScopeCreate,
+    QPDefinitionOfTermCreate,
+    QPReferenceDocumentCreate,
+    QPResponsiblityAndAuthorityCreate,
+    QPProcedureCreate,
+    QPProcessCreate)
 
 class QualityProcedureManager(object):
     @staticmethod
@@ -60,3 +66,33 @@ class QualityProcedureManager(object):
         db.commit()
         db.refresh(new_responsibility_and_authority)
         return new_responsibility_and_authority
+    
+    @staticmethod
+    def get_all_procedure(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPProcedure).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def get_drrrf_procedures(db: Session, drrrf_id: int):
+        return db.query(models.QPProcedure).filter(models.QPProcedure.drrrf_id == drrrf_id).all()
+    
+    @staticmethod
+    def create_procedure(db: Session, procedure: QPProcedureCreate, drrrf_id: int):
+        new_procedure = models.QPProcedure(**procedure.dict(),drrrf_id=drrrf_id)
+
+        db.add(new_procedure)
+        db.commit()
+        db.refresh(new_procedure)
+        return new_procedure
+
+    @staticmethod
+    def get_all_process(db: Session, skip: int = 0, limit: int = 100):
+        return db.query(models.QPProcess).offset(skip).limit(limit).all()
+    
+    @staticmethod
+    def create_process(db: Session, process: QPProcessCreate, drrrf_id: int, procedure_id: int):
+        new_process = models.QPProcess(**process.dict(),drrrf_id=drrrf_id,procedure_id=procedure_id)
+
+        db.add(new_process)
+        db.commit()
+        db.refresh(new_process)
+        return new_process

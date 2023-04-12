@@ -193,34 +193,6 @@ class QPObjective(Base):
 
     drrrf = relationship("DRRRF", back_populates="qp_objective")
 
-class QPProcedure(Base):
-    __tablename__ = "qp_procedure"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
-    procedure = Column(Text, nullable=False)
-    #slug
-    date_created = Column(TIMESTAMP, nullable=False)
-
-    drrrf = relationship("DRRRF", back_populates="qp_procedure")
-    qp_process = relationship("QPProcess", back_populates="qp_procedure")
-
-class QPProcess(Base):
-    __tablename__ = "qp_process" 
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    procedure_id = Column(Integer, ForeignKey("qp_procedure.id"))
-    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
-    process_title = Column(String(100), nullable=False)
-    process_description = Column(Text, nullable=False) #WYSIWYG
-    #slug
-    date_created = Column(TIMESTAMP, nullable=False)
-
-    drrrf = relationship("DRRRF", back_populates="qp_process")
-    qp_procedure = relationship("QPProcedure", back_populates="qp_process")
-    qp_process_in_charge = relationship("QPProcessInCharge", back_populates="qp_process")
-    qp_process_record = relationship("QPProcessRecord", back_populates="qp_process")
-
 class QPProcessInCharge(Base):
     __tablename__ = "qp_process_in_charge"
 

@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from app.user.schemas import ProcessOwner
-from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm, QPReferenceDocument, QPResponsiblityAndAuthority
+from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm, QPReferenceDocument, QPResponsiblityAndAuthority, QPProcedure
 
 #QUALITY PROCEDURE REQUEST
 class QPRequestHistoryBase(BaseModel):
@@ -227,41 +227,6 @@ class QPProcessInCharge(QPProcessInChargeBase):
     process_id: int
     drrrf_id: int
     qp_responsibility_and_authority: QPResponsiblityAndAuthority = []
-
-    class Config:
-        orm_mode = True
-
-#PROCESS
-class QPProcessBase(BaseModel):
-    process_title: str
-    process_description: str
-    date_created: datetime
-
-class QPProcessCreate(QPProcessBase):
-    pass
-
-class QPProcess(QPProcessBase):
-    id: int
-    drrrf_id: int
-    procedure_id: int
-    qp_process_in_charge: List[QPProcessInCharge] = []
-    qp_process_record: List[QPProcessRecord] = []
-
-    class Config:
-        orm_mode = True
-
-#PROCEDURE
-class QPProcedureBase(BaseModel):
-    procedure: str
-    date_created: datetime
-
-class QPProcedureCreate(QPProcedureBase):
-    pass
-
-class QPProcedure(QPProcedureBase):
-    id: int
-    drrrf_id: int
-    qp_process: List[QPProcess] = []
 
     class Config:
         orm_mode = True

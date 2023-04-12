@@ -3,7 +3,7 @@ from app.quality_procedure import models
 from sqlalchemy.orm import Session
 
 from app.quality_procedure.schemas import QualityProcedureDocumentRequestStatusUpdate, QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnitCreate, IUReviewSummaryCreate
-from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPProcedureCreate, QPProcessCreate, QPProcessInChargeCreate, QPProcessNoteCreate, QPProcessRecordCreate, QPReportCreate, QPPerformanceIndicatorCreate, QPAttachmentAndFormCreate
+from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPProcessInChargeCreate, QPProcessNoteCreate, QPProcessRecordCreate, QPReportCreate, QPPerformanceIndicatorCreate, QPAttachmentAndFormCreate
 from app.quality_procedure.schemas import StatusCreate
 from app.quality_procedure.schemas import DistributionListCreate
 
@@ -151,37 +151,6 @@ class QualityProcedureManager(object):
         db.commit()
         db.refresh(new_objective)
         return new_objective
-
-    @staticmethod
-    def get_all_procedure(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QPProcedure).offset(skip).limit(limit).all()
-    
-    @staticmethod
-    def get_drrrf_procedures(db: Session, drrrf_id: int):
-        return db.query(models.QPProcedure).filter(models.QPProcedure.drrrf_id == drrrf_id).all()
-    
-    @staticmethod
-    def create_procedure(db: Session, procedure: QPProcedureCreate, drrrf_id: int):
-        new_procedure = models.QPProcedure(**procedure.dict(),drrrf_id=drrrf_id)
-
-        db.add(new_procedure)
-        db.bulk_save_objects
-        db.commit()
-        db.refresh(new_procedure)
-        return new_procedure
-    
-    @staticmethod
-    def get_all_process(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QPProcess).offset(skip).limit(limit).all()
-    
-    @staticmethod
-    def create_process(db: Session, process: QPProcessCreate, drrrf_id: int, procedure_id: int):
-        new_process = models.QPProcess(**process.dict(),drrrf_id=drrrf_id,procedure_id=procedure_id)
-
-        db.add(new_process)
-        db.commit()
-        db.refresh(new_process)
-        return new_process
 
     @staticmethod
     def get_all_process_in_charge(db: Session, skip: int = 0, limit: int = 100):
