@@ -15,7 +15,13 @@ from app.quality_procedure.content.schemas import (
     QPProcedure,
     QPProcedureCreate,
     QPProcess,
-    QPProcessCreate)
+    QPProcessCreate,
+    QPProcessInCharge,
+    QPProcessInChargeCreate,
+    QPProcessRecord,
+    QPProcessRecordCreate,
+    QPAttachmentAndForm,
+    QPAttachmentAndFormCreate)
 from app.quality_procedure.content.services import QualityProcedureManager
 from app.deps import get_db
 
@@ -146,3 +152,75 @@ def get_all_process(db: Session = Depends(get_db)):
 )
 def create_procedure(drrrf_id: int, procedure_id: int, process: QPProcessCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_process(db, process, drrrf_id, procedure_id)
+
+#GET ALL PROCESS IN-CHARGE
+@quality_procedure_content_router.get(
+    "/process-in-charge",
+    response_model=List[QPProcessInCharge],
+    status_code=status.HTTP_200_OK
+)
+def get_all_process_in_charge(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_process_in_charge(db)
+
+#CREATE PROCESS IN-CHARGE
+@quality_procedure_content_router.post(
+    "/{drrrf_id}/processes/{process_id}/process-in-charge",
+    response_model=QPProcessInCharge,
+    status_code=status.HTTP_201_CREATED
+)
+def create_process_in_charge(drrrf_id: int, process_id: int, process_in_charge: QPProcessInChargeCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_process_in_charge(db, process_in_charge, drrrf_id, process_id)
+
+#GET ALL PROCESS RECORD
+@quality_procedure_content_router.get(
+    "/process-records",
+    response_model=List[QPProcessRecord],
+    status_code=status.HTTP_200_OK
+)
+def get_all_process_record(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_process_record(db)
+
+#GET ALL PROCESS PROCESS RECORD
+@quality_procedure_content_router.get(
+    "/{process_id}/process-records",
+    response_model=List[QPProcessRecord],
+    status_code=status.HTTP_200_OK
+)
+def get_all_process_process_record(process_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_process_process_record(db, process_id)
+
+#CREATE PROCESS RECORD
+@quality_procedure_content_router.post(
+    "/{drrrf_id}/processes/{process_id}/process-records",
+    response_model=QPProcessRecord,
+    status_code=status.HTTP_201_CREATED
+)
+def create_process_record(drrrf_id: int, process_id: int, process_record: QPProcessRecordCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_process_record(db, process_record, drrrf_id, process_id)
+
+#GET ALL ATTACHMENT AND FORM
+@quality_procedure_content_router.get(
+    "/attachments-and-forms",
+    response_model=List[QPAttachmentAndForm],
+    status_code=status.HTTP_200_OK
+)
+def get_all_attachment_and_form(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_attachment_and_form(db)
+
+#GET ALL DRRRF ATTACHMENT AND FORM
+@quality_procedure_content_router.get(
+    "/{drrrf_id}/attachments-and-forms",
+    response_model=List[QPAttachmentAndForm],
+    status_code=status.HTTP_200_OK
+)
+def get_all_drrrf_attachment_and_form(drrrf_id: int, db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_drrrf_attachment_and_form(db, drrrf_id)
+
+#CREATE ATTACHMENT AND FORM
+@quality_procedure_content_router.post(
+    "/{drrrf_id}/attachments-and-forms",
+    response_model=QPAttachmentAndForm,
+    status_code=status.HTTP_201_CREATED
+)
+def create_attachment_and_form(drrrf_id: int, attachment_and_form: QPAttachmentAndFormCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_attachment_and_form(db, attachment_and_form, drrrf_id)

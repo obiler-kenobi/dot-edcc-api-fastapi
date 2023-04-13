@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from app.user.schemas import ProcessOwner
-from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm, QPReferenceDocument, QPResponsiblityAndAuthority, QPProcedure
+from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm, QPReferenceDocument, QPResponsiblityAndAuthority, QPProcedure, QPAttachmentAndForm
 
 #QUALITY PROCEDURE REQUEST
 class QPRequestHistoryBase(BaseModel):
@@ -46,7 +46,7 @@ class QualityProcedureDocumentRequest(QualityProcedureDocumentRequestBase):
 class QualityProcedureDocumentRequestStatusUpdate(BaseModel):
     status_id: int
     action_id: int
-
+    
     class Config:
         orm_mode = True
 
@@ -129,22 +129,6 @@ class QPProcessNote(QPProcessNoteBase):
     class Config:
         orm_mode = True
 
-#PROCESS RECORD
-class QPProcessRecordBase(BaseModel):
-    record: str
-    date_created: datetime
-
-class QPProcessRecordCreate(QPProcessRecordBase):
-    pass
-
-class QPProcessRecord(QPProcessRecordBase):
-    id: int
-    process_id: int
-    drrrf_id: int
-
-    class Config:
-        orm_mode = True
-
 #REPORT
 class QPReportBase(BaseModel):
     report: str
@@ -178,27 +162,6 @@ class QPPerformanceIndicator(QPPerformanceIndicatorBase):
     class Config:
         orm_mode = True
 
-#ATTACHMENT AND FORM
-class QPAttachmentAndFormBase(BaseModel):
-    record: str
-    #control_number: str omitted, will be available on LOR
-    #maintenance: int omitted, will be available on LOR
-    #preservation: int omitted, will be available on LOR
-    #remarks: str omitted, will be available on LOR
-    #file_path: str omitted, will be available on LOR
-    #include_in_lor: bool omitted, will be available on 9.0
-    date_created: datetime
-
-class QPAttachmentAndFormCreate(QPAttachmentAndFormBase):
-    pass
-
-class QPAttachmentAndForm(QPAttachmentAndFormBase):
-    id: int
-    drrrf_id: int
-
-    class Config:
-        orm_mode = True
-
 class StatusBase(BaseModel):
     status: str
     status_placement: int
@@ -214,23 +177,6 @@ class Status(StatusBase):
     class Config:
         orm_mode = True
     
-
-#PROCESS IN CHARGE
-class QPProcessInChargeBase(BaseModel):
-    date_created: datetime
-
-class QPProcessInChargeCreate(QPProcessInChargeBase):
-    in_charge_id: int
-
-class QPProcessInCharge(QPProcessInChargeBase):
-    id: int 
-    process_id: int
-    drrrf_id: int
-    qp_responsibility_and_authority: QPResponsiblityAndAuthority = []
-
-    class Config:
-        orm_mode = True
-
 #DRRRF
 class RegisteredDRRRFBase(BaseModel):
     received_date: datetime

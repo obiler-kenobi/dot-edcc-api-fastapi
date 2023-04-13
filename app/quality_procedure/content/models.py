@@ -73,3 +73,44 @@ class QPProcess(Base):
     qp_procedure = relationship("QPProcedure", back_populates="qp_process")
     qp_process_in_charge = relationship("QPProcessInCharge", back_populates="qp_process")
     qp_process_record = relationship("QPProcessRecord", back_populates="qp_process")
+
+class QPProcessInCharge(Base):
+    __tablename__ = "qp_process_in_charge"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    process_id = Column(Integer, ForeignKey("qp_process.id"))
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id")) 
+    in_charge_id = Column(Integer, ForeignKey("qp_responsibility_and_authority.id"))
+    date_created = Column(TIMESTAMP, nullable=False)
+
+    drrrf = relationship("DRRRF", back_populates="qp_process_in_charge")
+    qp_process = relationship("QPProcess", back_populates="qp_process_in_charge")
+    qp_responsibility_and_authority = relationship("QPResponsbilityAndAuthority", back_populates="qp_process_in_charge")
+
+class QPProcessRecord(Base):
+    __tablename__ = "qp_process_record"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    process_id = Column(Integer, ForeignKey("qp_process.id"))
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
+    record = Column(Text, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+
+    qp_process = relationship("QPProcess", back_populates="qp_process_record")
+    drrrf = relationship("DRRRF", back_populates="qp_process_record")
+
+class QPAttachmentAndForm(Base):
+    __tablename__ = "qp_attachments_and_form"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
+    record = Column(String(100), nullable=False)
+    control_number = Column(String(100), nullable=True)
+    maintenance = Column(Integer, nullable=True)
+    preservation = Column(Integer, nullable=True)
+    remarks = Column(String(50), nullable=True)
+    file_path = Column(String(100), nullable=True)
+    include_in_lor = Column(Boolean, nullable=True, default=False)
+    date_created = Column(TIMESTAMP, nullable=False) 
+    
+    drrrf = relationship("DRRRF", back_populates="qp_attachments_and_form")

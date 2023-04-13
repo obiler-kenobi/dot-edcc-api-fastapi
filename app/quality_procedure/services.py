@@ -3,7 +3,7 @@ from app.quality_procedure import models
 from sqlalchemy.orm import Session
 
 from app.quality_procedure.schemas import QualityProcedureDocumentRequestStatusUpdate, QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnitCreate, IUReviewSummaryCreate
-from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPProcessInChargeCreate, QPProcessNoteCreate, QPProcessRecordCreate, QPReportCreate, QPPerformanceIndicatorCreate, QPAttachmentAndFormCreate
+from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPProcessNoteCreate, QPReportCreate, QPPerformanceIndicatorCreate
 from app.quality_procedure.schemas import StatusCreate
 from app.quality_procedure.schemas import DistributionListCreate
 
@@ -153,19 +153,6 @@ class QualityProcedureManager(object):
         return new_objective
 
     @staticmethod
-    def get_all_process_in_charge(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QPProcessInCharge).offset(skip).limit(limit).all()
-    
-    @staticmethod
-    def create_process_in_charge(db: Session, process_in_charge: QPProcessInChargeCreate, drrrf_id: int, process_id: int):
-        new_process_in_charge = models.QPProcessInCharge(**process_in_charge.dict(), drrrf_id=drrrf_id,process_id=process_id)
-
-        db.add(new_process_in_charge)
-        db.commit()
-        db.refresh(new_process_in_charge)
-        return new_process_in_charge
-    
-    @staticmethod
     def get_all_process_note(db: Session, skip: int = 0, limit: int = 100):
         return db.query(models.QPProcessNote).offset(skip).limit(limit).all()
     
@@ -178,22 +165,7 @@ class QualityProcedureManager(object):
         db.refresh(new_process_note)
         return new_process_note
 
-    @staticmethod
-    def get_all_process_record(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QPProcessRecord).offset(skip).limit(limit).all()
-    
-    @staticmethod
-    def get_all_process_process_record(db: Session, process_id: int):
-        return db.query(models.QPProcessRecord).filter(models.QPProcessRecord.process_id == process_id).all()
-    
-    @staticmethod
-    def create_process_record(db: Session, process_record: QPProcessRecordCreate, drrrf_id: int, process_id: int):
-        new_process_record = models.QPProcessRecord(**process_record.dict(), drrrf_id=drrrf_id,process_id=process_id)
 
-        db.add(new_process_record)
-        db.commit()
-        db.refresh(new_process_record)
-        return new_process_record
     
     @staticmethod
     def get_all_report(db: Session, skip: int = 0, limit: int = 100):
@@ -220,23 +192,7 @@ class QualityProcedureManager(object):
         db.commit()
         db.refresh(new_performance_indicator)
         return new_performance_indicator
-    
-    @staticmethod
-    def get_all_attachment_and_form(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QPAttachmentAndForm).offset(skip).limit(limit).all()
-    
-    @staticmethod
-    def get_all_drrrf_attachment_and_form(db: Session, drrrf_id: int):
-        return db.query(models.QPAttachmentAndForm).filter(models.QPAttachmentAndForm.drrrf_id == drrrf_id).all()
-    
-    @staticmethod
-    def create_attachment_and_form(db: Session, attachment_and_form: QPAttachmentAndFormCreate, drrrf_id: int):
-        new_attachment_and_form = models.QPAttachmentAndForm(**attachment_and_form.dict(), drrrf_id=drrrf_id)
 
-        db.add(new_attachment_and_form)
-        db.commit()
-        db.refresh(new_attachment_and_form)
-        return new_attachment_and_form
     
 class StatusManager(object):
     @staticmethod

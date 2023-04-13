@@ -65,6 +65,38 @@ class QPResponsiblityAndAuthority(QPResponsiblityAndAuthorityBase):
     class Config:
         orm_mode = True
 
+#PROCESS IN CHARGE
+class QPProcessInChargeBase(BaseModel):
+    date_created: datetime
+
+class QPProcessInChargeCreate(QPProcessInChargeBase):
+    in_charge_id: int
+
+class QPProcessInCharge(QPProcessInChargeBase):
+    id: int 
+    process_id: int
+    drrrf_id: int
+    qp_responsibility_and_authority: QPResponsiblityAndAuthority = []
+
+    class Config:
+        orm_mode = True
+
+#PROCESS RECORD
+class QPProcessRecordBase(BaseModel):
+    record: str
+    date_created: datetime
+
+class QPProcessRecordCreate(QPProcessRecordBase):
+    pass
+
+class QPProcessRecord(QPProcessRecordBase):
+    id: int
+    process_id: int
+    drrrf_id: int
+
+    class Config:
+        orm_mode = True
+
 #PROCESS
 class QPProcessBase(BaseModel):
     process_title: str
@@ -78,8 +110,8 @@ class QPProcess(QPProcessBase):
     id: int
     drrrf_id: int
     procedure_id: int
-    #qp_process_in_charge: List[QPProcessInCharge] = []
-    #qp_process_record: List[QPProcessRecord] = []
+    qp_process_in_charge: List[QPProcessInCharge] = []
+    qp_process_record: List[QPProcessRecord] = []
 
     class Config:
         orm_mode = True
@@ -96,6 +128,31 @@ class QPProcedure(QPProcedureBase):
     id: int
     drrrf_id: int
     qp_process: List[QPProcess]
+
+    class Config:
+        orm_mode = True
+
+#ATTACHMENT AND FORM
+class QPAttachmentAndFormBase(BaseModel):
+    record: str
+    date_created: datetime
+
+class LORUpdate(BaseModel):
+    control_number: str
+    maintenance: int
+    preservation: int
+    remarks: str
+    file_path: str
+    
+class QPAttachmentAndFormCreateUpdate(BaseModel):
+    include_in_lor: bool
+
+class QPAttachmentAndFormCreate(QPAttachmentAndFormBase):
+    pass
+
+class QPAttachmentAndForm(QPAttachmentAndFormBase):
+    id: int
+    drrrf_id: int
 
     class Config:
         orm_mode = True
