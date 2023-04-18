@@ -127,7 +127,7 @@ class QPProcedureCreate(QPProcedureBase):
 class QPProcedure(QPProcedureBase):
     id: int
     drrrf_id: int
-    qp_process: List[QPProcess]
+    qp_process: list[QPProcess] = []
 
     class Config:
         orm_mode = True

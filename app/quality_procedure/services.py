@@ -7,6 +7,8 @@ from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, 
 from app.quality_procedure.schemas import StatusCreate
 from app.quality_procedure.schemas import DistributionListCreate
 
+from operator import itemgetter
+
 class QualityProcedureDocumentRequestManager(object): 
     @staticmethod
     def get_all_active_quality_procedure_document_requests(db: Session, skip: int = 0, limit: int = 100):
@@ -61,7 +63,15 @@ class DRRRFManager(object):
 
     @staticmethod
     def get_drrrf(db: Session, slug: str):
-        return db.query(models.DRRRF).filter(models.DRRRF.slug == slug).first()
+        procedure = db.query(models.DRRRF).filter(models.DRRRF.slug == slug).first()
+        PROCEDURE_LENGTH = len(procedure.qp_procedure)
+
+        procedure.qp_procedure = sorted(procedure.qp_procedure, key=lambda x: x.id)
+
+        for x in range(PROCEDURE_LENGTH):
+            procedure.qp_procedure[x].qp_process = sorted(procedure.qp_procedure[x].qp_process, key=lambda x: x.id)
+    
+        return procedure
     
     @staticmethod
     def approve_quality_procedure(db: Session, drrrf_id: int, drrrf_status: DRRRFStatusUpdate):
