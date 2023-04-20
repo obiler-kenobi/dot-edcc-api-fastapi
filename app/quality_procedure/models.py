@@ -214,17 +214,6 @@ class QPReport(Base):
 
     drrrf = relationship("DRRRF", back_populates="qp_report")
 
-class QPPerformanceIndicator(Base):
-    __tablename__ = "qp_performance_indicator"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
-    in_charge = Column(String(100), nullable=False)
-    indicator = Column(Text, nullable=False)
-    date_created = Column(TIMESTAMP, nullable=False)
-    
-    drrrf = relationship("DRRRF", back_populates="qp_performance_indicator")
-
 class QPDistributionList(Base):
     __tablename__ = "qp_distribution_list"
 

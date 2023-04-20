@@ -21,7 +21,9 @@ from app.quality_procedure.content.schemas import (
     QPProcessRecord,
     QPProcessRecordCreate,
     QPAttachmentAndForm,
-    QPAttachmentAndFormCreate)
+    QPAttachmentAndFormCreate,
+    QPPerformanceIndicator,
+    QPPerformanceIndicatorCreate)
 from app.quality_procedure.content.services import QualityProcedureManager
 from app.deps import get_db
 
@@ -224,3 +226,21 @@ def get_all_drrrf_attachment_and_form(drrrf_id: int, db: Session = Depends(get_d
 )
 def create_attachment_and_form(drrrf_id: int, attachment_and_form: QPAttachmentAndFormCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_attachment_and_form(db, attachment_and_form, drrrf_id)
+
+#GET ALL PERFORMANCE INDICATORS
+@quality_procedure_content_router.get(
+    "/quality-procedures/performance-indicators",
+    response_model=List[QPPerformanceIndicator],
+    status_code=status.HTTP_200_OK
+)
+def get_all_performance_indicator(db: Session = Depends(get_db)):
+    return QualityProcedureManager.get_all_performance_indicator(db)
+
+#CREATE PROCESS REPORT
+@quality_procedure_content_router.post(
+    "/quality-procedures/{drrrf_id}/performance-indicators",
+    response_model=QPPerformanceIndicator,
+    status_code=status.HTTP_201_CREATED
+)
+def create_performance_indicator(drrrf_id: int, performance_indicator: QPPerformanceIndicatorCreate, db: Session = Depends(get_db)):
+    return QualityProcedureManager.create_performance_indicator(db, performance_indicator, drrrf_id)

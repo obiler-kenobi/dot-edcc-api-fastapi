@@ -143,6 +143,22 @@ class LORUpdate(BaseModel):
     preservation: int
     remarks: str
     file_path: str
+
+#PERFORMANCE INDICATOR
+class QPPerformanceIndicatorBase(BaseModel):
+    in_charge: str
+    indicator: str
+    date_created: datetime
+
+class QPPerformanceIndicatorCreate(QPPerformanceIndicatorBase):
+    pass
+
+class QPPerformanceIndicator(QPPerformanceIndicatorBase):
+    id: int
+    drrrf_id: int
+
+    class Config:
+        orm_mode = True
     
 class QPAttachmentAndFormCreateUpdate(BaseModel):
     include_in_lor: bool

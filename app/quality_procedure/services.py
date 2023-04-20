@@ -3,7 +3,7 @@ from app.quality_procedure import models
 from sqlalchemy.orm import Session
 
 from app.quality_procedure.schemas import QualityProcedureDocumentRequestStatusUpdate, QualityProcedureDocumentRequestCreate, QPRequestHistoryCreate, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnitCreate, IUReviewSummaryCreate
-from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPProcessNoteCreate, QPReportCreate, QPPerformanceIndicatorCreate
+from app.quality_procedure.schemas import QPTitlePageCreate, QPObjectiveCreate, QPProcessNoteCreate, QPReportCreate
 from app.quality_procedure.schemas import StatusCreate
 from app.quality_procedure.schemas import DistributionListCreate
 
@@ -175,8 +175,6 @@ class QualityProcedureManager(object):
         db.refresh(new_process_note)
         return new_process_note
 
-
-    
     @staticmethod
     def get_all_report(db: Session, skip: int = 0, limit: int = 100):
         return db.query(models.QPReport).offset(skip).limit(limit).all()
@@ -189,19 +187,7 @@ class QualityProcedureManager(object):
         db.commit()
         db.refresh(new_report)
         return new_report
-    
-    @staticmethod
-    def get_all_performance_indicator(db: Session, skip: int = 0, limit: int = 100):
-        return db.query(models.QPPerformanceIndicator).offset(skip).limit(limit).all()
-    
-    @staticmethod
-    def create_performance_indicator(db: Session, performance_indicator: QPPerformanceIndicatorCreate, drrrf_id: int):
-        new_performance_indicator = models.QPPerformanceIndicator(**performance_indicator.dict(), drrrf_id=drrrf_id)
 
-        db.add(new_performance_indicator)
-        db.commit()
-        db.refresh(new_performance_indicator)
-        return new_performance_indicator
 
     
 class StatusManager(object):

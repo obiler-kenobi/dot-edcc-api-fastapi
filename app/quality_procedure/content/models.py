@@ -114,3 +114,13 @@ class QPAttachmentAndForm(Base):
     date_created = Column(TIMESTAMP, nullable=False) 
     
     drrrf = relationship("DRRRF", back_populates="qp_attachments_and_form")
+
+class QPPerformanceIndicator(Base):
+    __tablename__ = "qp_performance_indicator"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    drrrf_id = Column(Integer, ForeignKey("drrrf.id"))
+    indicator = Column(JSONB, nullable=False)
+    date_created = Column(TIMESTAMP, nullable=False)
+    
+    drrrf = relationship("DRRRF", back_populates="qp_performance_indicator")

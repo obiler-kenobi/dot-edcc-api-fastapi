@@ -11,7 +11,7 @@ from app.quality_procedure.schemas import (
     QPRequestHistoryCreate) #QP REQUESTS
 from app.quality_procedure.schemas import DRRRF, DRRRFCreate, DRRRFStatusUpdate, DRRRFDistributeUpdate, InterfacingUnit, InterfacingUnitCreate, IUReviewSummary, IUReviewSummaryCreate
 from app.quality_procedure.services import QualityProcedureDocumentRequestManager, DRRRFManager
-from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPProcessNote, QPProcessNoteCreate, QPReport, QPReportCreate, QPPerformanceIndicator, QPPerformanceIndicatorCreate, Status, StatusCreate
+from app.quality_procedure.schemas import QPTitlePage, QPTitlePageCreate, QPObjective, QPObjectiveCreate, QPProcessNote, QPProcessNoteCreate, QPReport, QPReportCreate, Status, StatusCreate
 from app.quality_procedure.services import QualityProcedureManager, StatusManager
 from app.quality_procedure.schemas import DistributionList, DistributionListCreate
 from app.quality_procedure.services import DistributionListManager
@@ -263,26 +263,6 @@ def get_all_report(db: Session = Depends(get_db)):
 )
 def create_report(drrrf_id: int, report: QPReportCreate, db: Session = Depends(get_db)):
     return QualityProcedureManager.create_report(db, report, drrrf_id)
-
-#GET ALL PERFORMANCE INDICATORS
-@quality_procedure_router.get(
-    "/quality-procedures/performance-indicators",
-    response_model=List[QPPerformanceIndicator],
-    status_code=status.HTTP_200_OK
-)
-def get_all_performance_indicator(db: Session = Depends(get_db)):
-    return QualityProcedureManager.get_all_performance_indicator(db)
-
-#CREATE PROCESS REPORT
-@quality_procedure_router.post(
-    "/quality-procedures/{drrrf_id}/performance-indicators",
-    response_model=QPPerformanceIndicator,
-    status_code=status.HTTP_201_CREATED
-)
-def create_performance_indicator(drrrf_id: int, performance_indicator: QPPerformanceIndicatorCreate, db: Session = Depends(get_db)):
-    return QualityProcedureManager.create_performance_indicator(db, performance_indicator, drrrf_id)
-
-
 
 #GET ALL STATUS
 @quality_procedure_router.get(

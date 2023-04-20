@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from app.user.schemas import ProcessOwner
-from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm, QPReferenceDocument, QPResponsiblityAndAuthority, QPProcedure, QPAttachmentAndForm
+from app.quality_procedure.content.schemas import QPScope, QPDefinitionOfTerm, QPReferenceDocument, QPResponsiblityAndAuthority, QPProcedure, QPAttachmentAndForm, QPPerformanceIndicator
 
 #QUALITY PROCEDURE REQUEST
 class QPRequestHistoryBase(BaseModel):
@@ -140,22 +140,6 @@ class QPReportCreate(QPReportBase):
     pass
 
 class QPReport(QPReportBase):
-    id: int
-    drrrf_id: int
-
-    class Config:
-        orm_mode = True
-
-#PERFORMANCE INDICATOR
-class QPPerformanceIndicatorBase(BaseModel):
-    in_charge: str
-    indicator: str
-    date_created: datetime
-
-class QPPerformanceIndicatorCreate(QPPerformanceIndicatorBase):
-    pass
-
-class QPPerformanceIndicator(QPPerformanceIndicatorBase):
     id: int
     drrrf_id: int
 
