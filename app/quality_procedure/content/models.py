@@ -111,7 +111,9 @@ class QPAttachmentAndForm(Base):
     remarks = Column(String(50), nullable=True)
     file_path = Column(String(100), nullable=True)
     include_in_lor = Column(Boolean, nullable=True, default=False)
+    remove_in_attachments = Column(Boolean, nullable=True, default=False)
     date_created = Column(TIMESTAMP, nullable=False) 
+    date_updated = Column(TIMESTAMP, nullable=True)
     
     drrrf = relationship("DRRRF", back_populates="qp_attachments_and_form")
 

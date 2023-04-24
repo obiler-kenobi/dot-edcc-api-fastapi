@@ -146,8 +146,7 @@ class LORUpdate(BaseModel):
 
 #PERFORMANCE INDICATOR
 class QPPerformanceIndicatorBase(BaseModel):
-    in_charge: str
-    indicator: str
+    indicator: Dict[str, dict | str | list]
     date_created: datetime
 
 class QPPerformanceIndicatorCreate(QPPerformanceIndicatorBase):
@@ -170,5 +169,12 @@ class QPAttachmentAndForm(QPAttachmentAndFormBase):
     id: int
     drrrf_id: int
 
+    class Config:
+        orm_mode = True
+
+class QPAttachmentAndFormRemove(BaseModel):
+    remove_in_attachments: bool
+    date_updated: datetime
+    
     class Config:
         orm_mode = True

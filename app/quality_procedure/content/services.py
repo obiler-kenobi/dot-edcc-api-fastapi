@@ -12,7 +12,8 @@ from app.quality_procedure.content.schemas import (
     QPProcessInChargeCreate,
     QPProcessRecordCreate,
     QPAttachmentAndFormCreate,
-    QPPerformanceIndicatorCreate)
+    QPPerformanceIndicatorCreate,
+    QPAttachmentAndFormRemove)
 
 class QualityProcedureManager(object):
     @staticmethod
@@ -147,6 +148,16 @@ class QualityProcedureManager(object):
         db.commit()
         db.refresh(new_attachment_and_form)
         return new_attachment_and_form
+    
+    @staticmethod
+    def remove_from_attachment_and_form(db: Session, attachment_and_form_id: int, attachment_and_form: QPAttachmentAndFormRemove):
+        stored_item_data = db.query(models.QPAttachmentAndForm).filter(models.QPAttachmentAndForm.id == attachment_and_form_id).first()
+        update_data = attachment_and_form.dict(exclude_unset=True)
+
+        db.query(models.QPAttachmentAndForm).filter(models.QPAttachmentAndForm.id == attachment_and_form_id).update(update_data, synchronize_session=False)
+        db.commit()
+        db.refresh(stored_item_data)
+        return stored_item_data
     
     @staticmethod
     def get_all_performance_indicator(db: Session, skip: int = 0, limit: int = 100):
